@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="github.leavesc.library">
+
+    <application>
+        <activity
+            android:name=".double_click.ViewDoubleClickCheckLibraryActivity"
+            android:exported="false" />
+    </application>
+</manifest>
