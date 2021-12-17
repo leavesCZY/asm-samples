@@ -8,6 +8,7 @@ import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.LdcInsnNode
 import org.objectweb.asm.tree.MethodInsnNode
 import org.objectweb.asm.tree.MethodNode
 
@@ -23,6 +24,7 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
         val classReader = ClassReader(byteArray)
         classReader.accept(classNode, ClassReader.EXPAND_FRAMES)
         val methods = classNode.methods
+        val taskList = mutableListOf<() -> Unit>()
         if (!methods.isNullOrEmpty()) {
             for (methodNode in methods) {
                 val instructionIterator = methodNode.instructions?.iterator()
@@ -31,11 +33,13 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                         val instruction = instructionIterator.next()
                         when (instruction.opcode) {
                             Opcodes.INVOKESTATIC -> {
-                                transformInvokeStatic(
-                                    classNode,
-                                    methodNode,
-                                    instruction as MethodInsnNode
-                                )
+                                taskList.add {
+                                    transformInvokeStatic(
+                                        classNode,
+                                        methodNode,
+                                        instruction as MethodInsnNode
+                                    )
+                                }
                             }
                             Opcodes.NEW -> {
                                 transformNew(
@@ -48,6 +52,9 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                     }
                 }
             }
+        }
+        taskList.forEach {
+            it.invoke()
         }
         val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
         classNode.accept(classWriter)
@@ -71,6 +78,11 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
             if (pointMethod != null) {
                 methodInsnNode.owner = config.formatOptimizedThreadPoolClass
                 methodInsnNode.name = pointMethod.methodNameReplace
+                methodInsnNode.desc = pointMethod.methodDescReplace
+                methodNode.instructions.insertBefore(
+                    methodInsnNode,
+                    LdcInsnNode(classNode.name.substringAfterLast('/'))
+                )
             }
         }
     }
@@ -90,8 +102,8 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
     override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
         return mutableSetOf(
             QualifiedContent.Scope.PROJECT,
-            QualifiedContent.Scope.SUB_PROJECTS,
-            QualifiedContent.Scope.EXTERNAL_LIBRARIES
+//            QualifiedContent.Scope.SUB_PROJECTS,
+//            QualifiedContent.Scope.EXTERNAL_LIBRARIES
         )
     }
 

@@ -40,14 +40,14 @@ class OptimizedThreadActivity : AppCompatActivity() {
                     Thread.sleep(Random.nextLong(300, 3000))
                     val threadName = Thread.currentThread().name
                     runOnUiThread {
-                        tvLog.append("\nfixedThreadPool threadName: $threadName")
+                        tvLog.append("\nfixedThreadPool: \n$threadName")
                     }
                 }
                 scheduledThreadPool.execute {
                     Thread.sleep(Random.nextLong(300, 3000))
                     val threadName = Thread.currentThread().name
                     runOnUiThread {
-                        tvLog.append("\nscheduledThreadPool threadName: $threadName")
+                        tvLog.append("\nscheduledThreadPool: \n$threadName")
                     }
                 }
             }

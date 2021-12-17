@@ -13,18 +13,21 @@ class OptimizedThreadPool {
     companion object {
 
         @JvmStatic
-        fun getExecutorService(threadSize: Int): ExecutorService {
+        fun getExecutorServiceWithName(threadSize: Int, className: String): ExecutorService {
             return getOptimizedExecutorService(
                 threadSize = threadSize,
-                name = "thread pool getExecutorService"
+                name = className
             )
         }
 
         @JvmStatic
-        fun getScheduledExecutorService(threadSize: Int): ScheduledExecutorService {
+        fun getScheduledExecutorServiceWithName(
+            threadSize: Int,
+            className: String
+        ): ScheduledExecutorService {
             return getOptimizedScheduledExecutorService(
                 threadSize = threadSize,
-                name = "thread pool getScheduledExecutorService"
+                name = className
             )
         }
 

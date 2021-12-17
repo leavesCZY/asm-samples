@@ -20,17 +20,20 @@ private val threadHookPoints = listOf(
     ThreadHookPoint(
         methodName = "newFixedThreadPool",
         methodDesc = "(I)Ljava/util/concurrent/ExecutorService;",
-        methodNameReplace = "getExecutorService"
+        methodNameReplace = "getExecutorServiceWithName",
+        methodDescReplace = "(ILjava/lang/String;)Ljava/util/concurrent/ExecutorService;"
     ),
     ThreadHookPoint(
         methodName = "newScheduledThreadPool",
         methodDesc = "(I)Ljava/util/concurrent/ScheduledExecutorService;",
-        methodNameReplace = "getScheduledExecutorService"
+        methodNameReplace = "getScheduledExecutorServiceWithName",
+        methodDescReplace = "(ILjava/lang/String;)Ljava/util/concurrent/ScheduledExecutorService;"
     )
 )
 
 data class ThreadHookPoint(
     val methodName: String,
     val methodDesc: String,
-    val methodNameReplace: String
+    val methodNameReplace: String,
+    val methodDescReplace: String
 )
