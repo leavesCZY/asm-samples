@@ -14,6 +14,31 @@ import org.objectweb.asm.tree.*
  */
 class DoubleClickTransform(private val config: DoubleClickConfig) : BaseTransform() {
 
+    private companion object {
+
+        private const val ViewDescriptor = "Landroid/view/View;"
+
+        private const val OnClickViewMethodDescriptor = "(Landroid/view/View;)V"
+
+        private const val ButterKnifeOnClickAnnotationDesc = "Lbutterknife/OnClick;"
+
+        private val MethodNode.onlyOneViewParameter: Boolean
+            get() = desc == OnClickViewMethodDescriptor
+
+        private fun MethodNode.hasCheckViewAnnotation(config: DoubleClickConfig): Boolean {
+            return hasAnnotation(config.formatCheckViewOnClickAnnotation)
+        }
+
+        private fun MethodNode.hasUncheckViewOnClickAnnotation(config: DoubleClickConfig): Boolean {
+            return hasAnnotation(config.formatUncheckViewOnClickAnnotation)
+        }
+
+        private fun MethodNode.hasButterKnifeOnClickAnnotation(): Boolean {
+            return hasAnnotation(ButterKnifeOnClickAnnotationDesc)
+        }
+
+    }
+
     override fun modifyClass(byteArray: ByteArray): ByteArray {
         val classReader = ClassReader(byteArray)
         val classNode = ClassNode()

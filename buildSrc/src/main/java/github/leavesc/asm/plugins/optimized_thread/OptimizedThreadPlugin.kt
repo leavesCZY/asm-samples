@@ -14,7 +14,7 @@ class OptimizedThreadPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         val appExtension: AppExtension = target.extensions.getByType()
-        appExtension.registerTransform(OptimizedThreadTransform())
+        appExtension.registerTransform(OptimizedThreadTransform(OptimizedThreadConfig()))
     }
 
 }

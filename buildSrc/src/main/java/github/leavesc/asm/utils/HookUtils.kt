@@ -20,29 +20,8 @@ val MethodNode.isStatic: Boolean
 val MethodNode.isInitMethod: Boolean
     get() = name == "<init>"
 
-const val ViewDescriptor = "Landroid/view/View;"
-
-private const val OnClickViewMethodDescriptor = "(Landroid/view/View;)V"
-
-private const val ButterKnifeOnClickAnnotationDesc = "Lbutterknife/OnClick;"
-
-val MethodNode.onlyOneViewParameter: Boolean
-    get() = desc == OnClickViewMethodDescriptor
-
-private fun MethodNode.hasAnnotation(annotationDesc: String): Boolean {
+fun MethodNode.hasAnnotation(annotationDesc: String): Boolean {
     return visibleAnnotations?.find { it.desc == annotationDesc } != null
-}
-
-fun MethodNode.hasCheckViewAnnotation(config: DoubleClickConfig): Boolean {
-    return hasAnnotation(config.formatCheckViewOnClickAnnotation)
-}
-
-fun MethodNode.hasUncheckViewOnClickAnnotation(config: DoubleClickConfig): Boolean {
-    return hasAnnotation(config.formatUncheckViewOnClickAnnotation)
-}
-
-fun MethodNode.hasButterKnifeOnClickAnnotation(): Boolean {
-    return hasAnnotation(ButterKnifeOnClickAnnotationDesc)
 }
 
 fun ClassNode.isHookPoint(config: DoubleClickConfig, methodNode: MethodNode): Boolean {

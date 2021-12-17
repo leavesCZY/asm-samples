@@ -1,6 +1,7 @@
 package github.leavesc.asm.optimized_thread
 
 import java.util.concurrent.*
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @Author: leavesC
@@ -13,19 +14,27 @@ class OptimizedThreadPool {
 
         @JvmStatic
         fun getExecutorService(threadSize: Int): ExecutorService {
-            return getOptimizedExecutorService(threadSize = threadSize, name = "getExecutorService")
+            return getOptimizedExecutorService(
+                threadSize = threadSize,
+                name = "thread pool getExecutorService"
+            )
         }
 
         @JvmStatic
-        fun getScheduledExecutorService(threadSize: Int, name: String): ExecutorService {
-            return getOptimizedScheduledExecutorService(threadSize = threadSize, name = name)
+        fun getScheduledExecutorService(threadSize: Int): ScheduledExecutorService {
+            return getOptimizedScheduledExecutorService(
+                threadSize = threadSize,
+                name = "thread pool getScheduledExecutorService"
+            )
         }
 
         private class NamedThreadFactory(private val name: String) : ThreadFactory {
 
+            private val threadId = AtomicInteger(0)
+
             override fun newThread(runnable: Runnable): Thread {
                 val thread = Thread(runnable)
-                thread.name = "thread pool - $name"
+                thread.name = name + " - " + threadId.getAndIncrement()
                 return thread
             }
 
@@ -45,15 +54,8 @@ class OptimizedThreadPool {
         private fun getOptimizedScheduledExecutorService(
             threadSize: Int,
             name: String
-        ): ExecutorService {
-            val executor = ThreadPoolExecutor(
-                threadSize, threadSize,
-                10000L, TimeUnit.MILLISECONDS,
-                LinkedBlockingQueue(),
-                NamedThreadFactory(name)
-            )
-            executor.allowCoreThreadTimeOut(true)
-            return executor
+        ): ScheduledExecutorService {
+            return Executors.newScheduledThreadPool(threadSize, NamedThreadFactory(name))
         }
 
     }

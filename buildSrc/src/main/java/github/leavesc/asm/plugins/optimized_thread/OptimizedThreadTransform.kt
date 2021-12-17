@@ -16,7 +16,7 @@ import org.objectweb.asm.tree.MethodNode
  * @Date: 2021/12/16 15:11
  * @Desc:
  */
-class OptimizedThreadTransform : BaseTransform() {
+class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : BaseTransform() {
 
     override fun modifyClass(byteArray: ByteArray): ByteArray {
         val classNode = ClassNode()
@@ -54,26 +54,23 @@ class OptimizedThreadTransform : BaseTransform() {
         return classWriter.toByteArray()
     }
 
-    private val EXECUTORS_CLASS = "java/util/concurrent/Executors"
-
     private fun transformInvokeStatic(
         classNode: ClassNode,
         methodNode: MethodNode,
         methodInsnNode: MethodInsnNode
     ) {
-        if (methodInsnNode.owner == EXECUTORS_CLASS) {
+        if (methodInsnNode.owner == config.executorsClass) {
             Log.log("methodInsnNode owner: " + methodInsnNode.owner)
             Log.log("methodInsnNode desc: " + methodInsnNode.desc)
             Log.log("methodInsnNode name: " + methodInsnNode.name)
             Log.log("methodInsnNode itf: " + methodInsnNode.itf)
-            when (methodInsnNode.name) {
-                "newFixedThreadPool" -> {
-                    if (methodInsnNode.desc == "(I)Ljava/util/concurrent/ExecutorService;") {
-                        methodInsnNode.owner =
-                            "github/leavesc/asm/optimized_thread/OptimizedThreadPool"
-                        methodInsnNode.name = "getExecutorService"
-                    }
-                }
+            val methodName = methodInsnNode.name
+            val methodDesc = methodInsnNode.desc
+            val pointMethod =
+                config.threadHookPointList.find { it.methodName == methodName && it.methodDesc == methodDesc }
+            if (pointMethod != null) {
+                methodInsnNode.owner = config.formatOptimizedThreadPoolClass
+                methodInsnNode.name = pointMethod.methodNameReplace
             }
         }
     }
