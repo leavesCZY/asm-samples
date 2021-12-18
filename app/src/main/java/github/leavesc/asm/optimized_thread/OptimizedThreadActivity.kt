@@ -29,12 +29,7 @@ class OptimizedThreadActivity : AppCompatActivity() {
 
     private val newFixedThreadPool = Executors.newFixedThreadPool(1)
 
-    private val newSingleThreadExecutor = Executors.newSingleThreadExecutor { r ->
-        Thread(
-            r,
-            "业志陈"
-        )
-    }
+    private val newSingleThreadExecutor = Executors.newSingleThreadExecutor()
 
     private val newCachedThreadPool = Executors.newCachedThreadPool()
 
@@ -68,7 +63,7 @@ class OptimizedThreadActivity : AppCompatActivity() {
             newScheduledThreadPool.execute {
                 task("newScheduledThreadPool")
             }
-            tvLog.append("\n********************\n")
+            tvLog.append("\n********************")
         }
         btnAnonymousThread.setOnClickListener {
             Thread {
@@ -78,7 +73,7 @@ class OptimizedThreadActivity : AppCompatActivity() {
                     tvLog.append("\n${threadName}")
                 }
             }.start()
-            tvLog.append("\n********************\n")
+            tvLog.append("\n********************")
         }
     }
 

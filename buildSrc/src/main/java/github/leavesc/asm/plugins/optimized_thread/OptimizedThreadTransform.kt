@@ -3,9 +3,9 @@ package github.leavesc.asm.plugins.optimized_thread
 import com.android.build.api.transform.QualifiedContent
 import com.android.build.gradle.internal.pipeline.TransformManager
 import github.leavesc.asm.base.BaseTransform
-import github.leavesc.asm.utils.Log
 import github.leavesc.asm.utils.insertArgument
 import github.leavesc.asm.utils.nameWithDesc
+import github.leavesc.asm.utils.simpleClassName
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
@@ -17,6 +17,19 @@ import org.objectweb.asm.tree.*
  * @Desc:
  */
 class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : BaseTransform() {
+
+    companion object {
+
+        private const val executorsClass = "java/util/concurrent/Executors"
+
+        private const val threadClass = "java/lang/Thread"
+
+        private const val threadFactoryClass = "java/util/concurrent/ThreadFactory"
+
+        private const val threadFactoryNewThreadMethodDesc =
+            "newThread(Ljava/lang/Runnable;)Ljava/lang/Thread;"
+
+    }
 
     override fun modifyClass(byteArray: ByteArray): ByteArray {
         val classNode = ClassNode()
@@ -33,7 +46,7 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                         when (instruction.opcode) {
                             Opcodes.INVOKESTATIC -> {
                                 val methodInsnNode = instruction as? MethodInsnNode
-                                if (methodInsnNode?.owner == config.executorsClass) {
+                                if (methodInsnNode?.owner == executorsClass) {
                                     taskList.add {
                                         transformInvokeStatic(
                                             classNode,
@@ -45,9 +58,9 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                             }
                             Opcodes.NEW -> {
                                 val typeInsnNode = instruction as? TypeInsnNode
-                                if (typeInsnNode?.desc == config.threadClass) {
+                                if (typeInsnNode?.desc == threadClass) {
+                                    //如果是在 ThreadFactory 内初始化线程，则不处理
                                     if (!classNode.isThreadFactoryMethod(methodNode)) {
-                                        Log.log("处理")
                                         taskList.add {
                                             transformNew(
                                                 classNode,
@@ -55,8 +68,6 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                                                 instruction
                                             )
                                         }
-                                    }else{
-                                        Log.log("不处理")
                                     }
                                 }
                             }
@@ -80,11 +91,14 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
     ) {
         val pointMethod = config.threadHookPointList.find { it.methodName == methodInsnNode.name }
         if (pointMethod != null) {
+            //将 Executors 替换为 OptimizedThreadPool
             methodInsnNode.owner = config.formatOptimizedThreadPoolClass
+            //为调用 newFixedThreadPool 等方法的指令多插入一个 String 类型的方法入参参数
             methodInsnNode.insertArgument(String::class.java)
+            //将 ClassName 作为入参参数传给 newFixedThreadPool 等方法
             methodNode.instructions.insertBefore(
                 methodInsnNode,
-                LdcInsnNode(classNode.name.substringAfterLast('/'))
+                LdcInsnNode(classNode.simpleClassName)
             )
         }
     }
@@ -96,26 +110,29 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
     ) {
         val instructions = methodNode.instructions
         val typeInsnNodeIndex = instructions.indexOf(typeInsnNode)
+        //从 typeInsnNode 指令开始遍历，找到调用 Thread 构造函数的指令，然后对其进行替换
         for (index in typeInsnNodeIndex + 1 until instructions.size()) {
             val node = instructions[index]
             if (node is MethodInsnNode && node.isThreadInitMethodInsn()) {
+                //将 Thread 替换为 OptimizedThread
                 typeInsnNode.desc = config.formatOptimizedThreadClass
-                instructions.insertBefore(node, LdcInsnNode(classNode.name.substringAfterLast('/')))
-                node.insertArgument(String::class.java)
                 node.owner = config.formatOptimizedThreadClass
+                //为调用 Thread 构造函数的指令多插入一个 String 类型的方法入参参数
+                node.insertArgument(String::class.java)
+                //将 ClassName 作为构造参数传给 OptimizedThread
+                instructions.insertBefore(node, LdcInsnNode(classNode.simpleClassName))
                 break
             }
         }
     }
 
-    private fun AbstractInsnNode.isThreadInitMethodInsn(): Boolean {
-        return this is MethodInsnNode && this.owner == "java/lang/Thread"
-                && this.name == "<init>"
+    private fun MethodInsnNode.isThreadInitMethodInsn(): Boolean {
+        return this.owner == threadClass && this.name == "<init>"
     }
 
     private fun ClassNode.isThreadFactoryMethod(methodNode: MethodNode): Boolean {
-        return this.interfaces?.contains("java/util/concurrent/ThreadFactory") == true
-                && methodNode.nameWithDesc == "newThread(Ljava/lang/Runnable;)Ljava/lang/Thread;"
+        return this.interfaces?.contains(threadFactoryClass) == true
+                && methodNode.nameWithDesc == threadFactoryNewThreadMethodDesc
     }
 
     override fun getInputTypes(): Set<QualifiedContent.ContentType> {

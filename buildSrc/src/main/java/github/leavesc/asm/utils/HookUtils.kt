@@ -13,6 +13,9 @@ import org.objectweb.asm.tree.MethodNode
  * @Date: 2021/12/7 11:07
  * @Desc:
  */
+val ClassNode.simpleClassName: String
+    get() = name.substringAfterLast('/')
+
 val MethodNode.nameWithDesc: String
     get() = name + desc
 
