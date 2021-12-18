@@ -31,22 +31,28 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                 if (instructionIterator != null) {
                     while (instructionIterator.hasNext()) {
                         val instruction = instructionIterator.next()
-                        when (instruction.opcode) {
-                            Opcodes.INVOKESTATIC -> {
-                                taskList.add {
-                                    transformInvokeStatic(
-                                        classNode,
-                                        methodNode,
-                                        instruction as MethodInsnNode
-                                    )
+                        if (instruction is MethodInsnNode) {
+                            when (instruction.opcode) {
+                                Opcodes.INVOKESTATIC -> {
+                                    if (instruction.owner == config.executorsClass) {
+                                        taskList.add {
+                                            transformInvokeStatic(
+                                                classNode,
+                                                methodNode,
+                                                instruction
+                                            )
+                                        }
+                                    }
                                 }
-                            }
-                            Opcodes.NEW -> {
-                                transformNew(
-                                    classNode,
-                                    methodNode,
-                                    instruction as? MethodInsnNode
-                                )
+                                Opcodes.NEW -> {
+                                    taskList.add {
+                                        transformNew(
+                                            classNode,
+                                            methodNode,
+                                            instruction
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -66,31 +72,25 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
         methodNode: MethodNode,
         methodInsnNode: MethodInsnNode
     ) {
-        if (methodInsnNode.owner == config.executorsClass) {
-            Log.log("methodInsnNode owner: " + methodInsnNode.owner)
-            Log.log("methodInsnNode desc: " + methodInsnNode.desc)
-            Log.log("methodInsnNode name: " + methodInsnNode.name)
-            Log.log("methodInsnNode itf: " + methodInsnNode.itf)
-            val methodName = methodInsnNode.name
-            val methodDesc = methodInsnNode.desc
-            val pointMethod =
-                config.threadHookPointList.find { it.methodName == methodName && it.methodDesc == methodDesc }
-            if (pointMethod != null) {
-                methodInsnNode.owner = config.formatOptimizedThreadPoolClass
-                methodInsnNode.name = pointMethod.methodNameReplace
-                methodInsnNode.desc = pointMethod.methodDescReplace
-                methodNode.instructions.insertBefore(
-                    methodInsnNode,
-                    LdcInsnNode(classNode.name.substringAfterLast('/'))
-                )
-            }
+        Log.log("methodInsnNode owner: " + methodInsnNode.owner)
+        Log.log("methodInsnNode desc: " + methodInsnNode.desc)
+        Log.log("methodInsnNode name: " + methodInsnNode.name)
+        Log.log("methodInsnNode itf: " + methodInsnNode.itf)
+        val pointMethod = config.threadHookPointList.find { it.methodName == methodInsnNode.name }
+        if (pointMethod != null) {
+            methodInsnNode.owner = config.formatOptimizedThreadPoolClass
+            methodInsnNode.desc = pointMethod.getNewMethodDesc(methodInsnNode.desc)
+            methodNode.instructions.insertBefore(
+                methodInsnNode,
+                LdcInsnNode(classNode.name.substringAfterLast('/'))
+            )
         }
     }
 
     private fun transformNew(
         classNode: ClassNode,
         methodNode: MethodNode,
-        methodInsnNode: MethodInsnNode?
+        methodInsnNode: MethodInsnNode
     ) {
 
     }

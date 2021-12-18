@@ -26,9 +26,30 @@ class OptimizedThreadActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvLog)
     }
 
-    private val fixedThreadPool = Executors.newFixedThreadPool(10)
+    private val newFixedThreadPool = Executors.newFixedThreadPool(1)
 
-    private val scheduledThreadPool = Executors.newScheduledThreadPool(10)
+    private val newSingleThreadExecutor = Executors.newSingleThreadExecutor { r ->
+        Thread(
+            r,
+            "业志陈"
+        )
+    }
+
+    private val newCachedThreadPool = Executors.newCachedThreadPool { r ->
+        Thread(
+            r,
+            "字节数组"
+        )
+    }
+
+    private val newSingleThreadScheduledExecutor = Executors.newSingleThreadScheduledExecutor { r ->
+        Thread(
+            r,
+            "leavesC"
+        )
+    }
+
+    private val newScheduledThreadPool = Executors.newScheduledThreadPool(1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,19 +57,27 @@ class OptimizedThreadActivity : AppCompatActivity() {
         btnSubmitTask.setOnClickListener(object : View.OnClickListener {
             @UncheckViewOnClick
             override fun onClick(v: View) {
-                fixedThreadPool.execute {
+                val task: (String) -> Unit = { threadType ->
                     Thread.sleep(Random.nextLong(300, 3000))
                     val threadName = Thread.currentThread().name
                     runOnUiThread {
-                        tvLog.append("\nfixedThreadPool: \n$threadName")
+                        tvLog.append("\n\n${threadType}: \n${threadName}")
                     }
                 }
-                scheduledThreadPool.execute {
-                    Thread.sleep(Random.nextLong(300, 3000))
-                    val threadName = Thread.currentThread().name
-                    runOnUiThread {
-                        tvLog.append("\nscheduledThreadPool: \n$threadName")
-                    }
+                newFixedThreadPool.execute {
+                    task("newFixedThreadPool")
+                }
+                newSingleThreadExecutor.execute {
+                    task("newSingleThreadExecutor")
+                }
+                newCachedThreadPool.execute {
+                    task("newCachedThreadPool")
+                }
+                newSingleThreadScheduledExecutor.execute {
+                    task("newSingleThreadScheduledExecutor")
+                }
+                newScheduledThreadPool.execute {
+                    task("newScheduledThreadPool")
                 }
             }
         })

@@ -1,5 +1,7 @@
 package github.leavesc.asm.plugins.optimized_thread
 
+import org.objectweb.asm.Type
+
 /**
  * @Author: leavesC
  * @Date: 2021/12/17 11:02
@@ -18,22 +20,34 @@ class OptimizedThreadConfig(
 
 private val threadHookPoints = listOf(
     ThreadHookPoint(
-        methodName = "newFixedThreadPool",
-        methodDesc = "(I)Ljava/util/concurrent/ExecutorService;",
-        methodNameReplace = "getExecutorServiceWithName",
-        methodDescReplace = "(ILjava/lang/String;)Ljava/util/concurrent/ExecutorService;"
+        methodName = "newFixedThreadPool"
     ),
     ThreadHookPoint(
-        methodName = "newScheduledThreadPool",
-        methodDesc = "(I)Ljava/util/concurrent/ScheduledExecutorService;",
-        methodNameReplace = "getScheduledExecutorServiceWithName",
-        methodDescReplace = "(ILjava/lang/String;)Ljava/util/concurrent/ScheduledExecutorService;"
-    )
+        methodName = "newSingleThreadExecutor"
+    ),
+    ThreadHookPoint(
+        methodName = "newCachedThreadPool"
+    ),
+    ThreadHookPoint(
+        methodName = "newSingleThreadScheduledExecutor"
+    ),
+    ThreadHookPoint(
+        methodName = "newScheduledThreadPool"
+    ),
 )
 
 data class ThreadHookPoint(
-    val methodName: String,
-    val methodDesc: String,
-    val methodNameReplace: String,
-    val methodDescReplace: String
-)
+    val methodName: String
+) {
+
+    fun getNewMethodDesc(methodDesc: String): String {
+        val type = Type.getMethodType(methodDesc)
+        val argumentTypes = type.argumentTypes
+        val returnType = type.returnType
+        val newArgumentTypes = arrayOfNulls<Type>(argumentTypes.size + 1)
+        System.arraycopy(argumentTypes, 0, newArgumentTypes, 0, argumentTypes.size - 1 + 1)
+        newArgumentTypes[newArgumentTypes.size - 1] = Type.getType(String::class.java)
+        return Type.getMethodDescriptor(returnType, *newArgumentTypes)
+    }
+
+}
