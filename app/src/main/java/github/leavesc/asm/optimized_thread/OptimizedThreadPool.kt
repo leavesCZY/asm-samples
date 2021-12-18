@@ -12,7 +12,7 @@ class OptimizedThreadPool {
 
     companion object {
 
-        private const val defaultThreadKeepAliveTime = 500L
+        private const val defaultThreadKeepAliveTime = 5000L
 
         @JvmStatic
         fun newFixedThreadPool(nThreads: Int, className: String): ExecutorService {

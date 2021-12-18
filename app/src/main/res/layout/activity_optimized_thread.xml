@@ -12,18 +12,25 @@
         android:layout_margin="20dp"
         android:text="向线程池提交任务" />
 
+    <Button
+        android:id="@+id/btnAnonymousThread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="启动匿名线程" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="10dp"
         android:layout_weight="1">
 
         <TextView
             android:id="@+id/tvLog"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:gravity="center"
+            android:layout_gravity="top"
+            android:gravity="center_horizontal"
             android:lineSpacingMultiplier="1.2"
             android:textSize="16sp"
             tools:text="111111111111111" />

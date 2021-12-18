@@ -166,7 +166,7 @@ abstract class BaseTransform : Transform() {
                         continue
                     }
                     Status.REMOVED -> {
-                        Log.log("处理 class： " + classFile.absoluteFile + "REMOVED")
+                        Log.log("处理 class： " + classFile.absoluteFile + " REMOVED")
                         //最终文件应该存放的路径
                         val destFilePath = classFile.absolutePath.replace(srcDirPath, destDirPath)
                         val destFile = File(destFilePath)
