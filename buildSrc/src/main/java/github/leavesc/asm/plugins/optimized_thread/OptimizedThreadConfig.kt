@@ -7,7 +7,7 @@ package github.leavesc.asm.plugins.optimized_thread
  */
 class OptimizedThreadConfig(
     private val optimizedThreadClass: String = "github.leavesc.asm.optimized_thread.OptimizedThread",
-    private val optimizedThreadPoolClass: String = "github.leavesc.asm.optimized_thread.OptimizedThreadPool",
+    private val optimizedThreadPoolClass: String = "github.leavesc.asm.optimized_thread.OptimizedExecutors",
     val threadHookPointList: List<ThreadHookPoint> = threadHookPoints,
 ) {
 

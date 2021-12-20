@@ -15,6 +15,7 @@ import org.objectweb.asm.tree.*
  * @Author: leavesC
  * @Date: 2021/12/16 15:11
  * @Desc:
+ * @Github：https://github.com/leavesC
  */
 class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : BaseTransform() {
 
@@ -93,7 +94,7 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
         if (pointMethod != null) {
             //将 Executors 替换为 OptimizedThreadPool
             methodInsnNode.owner = config.formatOptimizedThreadPoolClass
-            //为调用 newFixedThreadPool 等方法的指令多插入一个 String 类型的方法入参参数
+            //为调用 newFixedThreadPool 等方法的指令多插入一个 String 类型的方法入参参数声明
             methodInsnNode.insertArgument(String::class.java)
             //将 ClassName 作为入参参数传给 newFixedThreadPool 等方法
             methodNode.instructions.insertBefore(
@@ -117,7 +118,7 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                 //将 Thread 替换为 OptimizedThread
                 typeInsnNode.desc = config.formatOptimizedThreadClass
                 node.owner = config.formatOptimizedThreadClass
-                //为调用 Thread 构造函数的指令多插入一个 String 类型的方法入参参数
+                //为调用 Thread 构造函数的指令多插入一个 String 类型的方法入参参数声明
                 node.insertArgument(String::class.java)
                 //将 ClassName 作为构造参数传给 OptimizedThread
                 instructions.insertBefore(node, LdcInsnNode(classNode.simpleClassName))
