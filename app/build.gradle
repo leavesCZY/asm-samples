@@ -6,9 +6,11 @@ plugins {
 
 import github.leavesc.asm.plugins.double_click.DoubleClickPlugin
 import github.leavesc.asm.plugins.optimized_thread.OptimizedThreadPlugin
+import github.leavesc.asm.plugins.privacy_sentry.PrivacySentryPlugin
 
 apply plugin: DoubleClickPlugin
 apply plugin: OptimizedThreadPlugin
+apply plugin: PrivacySentryPlugin
 
 def keyAliasExt = "leavesc"
 def keyPasswordExt = "123456"

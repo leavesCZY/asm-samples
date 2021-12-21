@@ -1,12 +1,13 @@
 package github.leavesc.asm.base
 
 import com.android.build.api.transform.*
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
-import org.objectweb.asm.Type
+import com.android.build.gradle.internal.pipeline.TransformManager
 import github.leavesc.asm.utils.ClassUtils
 import github.leavesc.asm.utils.DigestUtils
 import github.leavesc.asm.utils.Log
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
+import org.objectweb.asm.Type
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -257,6 +258,26 @@ abstract class BaseTransform : Transform() {
         taskList.add(Callable<Unit> {
             task()
         })
+    }
+
+    override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
+        return mutableSetOf(
+            QualifiedContent.Scope.PROJECT,
+            QualifiedContent.Scope.SUB_PROJECTS,
+            QualifiedContent.Scope.EXTERNAL_LIBRARIES
+        )
+    }
+
+    override fun getInputTypes(): Set<QualifiedContent.ContentType> {
+        return TransformManager.CONTENT_CLASS
+    }
+
+    override fun getName(): String {
+        return javaClass.simpleName
+    }
+
+    override fun isIncremental(): Boolean {
+        return true
     }
 
     protected abstract fun modifyClass(byteArray: ByteArray): ByteArray

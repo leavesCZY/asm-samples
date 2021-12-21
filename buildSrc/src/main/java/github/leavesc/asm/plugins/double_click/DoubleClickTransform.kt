@@ -136,12 +136,4 @@ class DoubleClickTransform(private val config: DoubleClickConfig) : BaseTransfor
         )
     }
 
-    override fun getName(): String {
-        return "DoubleClickTransform"
-    }
-
-    override fun isIncremental(): Boolean {
-        return true
-    }
-
 }

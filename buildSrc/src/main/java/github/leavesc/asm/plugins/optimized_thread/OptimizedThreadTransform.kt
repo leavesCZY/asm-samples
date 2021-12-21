@@ -1,7 +1,5 @@
 package github.leavesc.asm.plugins.optimized_thread
 
-import com.android.build.api.transform.QualifiedContent
-import com.android.build.gradle.internal.pipeline.TransformManager
 import github.leavesc.asm.base.BaseTransform
 import github.leavesc.asm.utils.insertArgument
 import github.leavesc.asm.utils.nameWithDesc
@@ -134,26 +132,6 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
     private fun ClassNode.isThreadFactoryMethod(methodNode: MethodNode): Boolean {
         return this.interfaces?.contains(threadFactoryClass) == true
                 && methodNode.nameWithDesc == threadFactoryNewThreadMethodDesc
-    }
-
-    override fun getInputTypes(): Set<QualifiedContent.ContentType> {
-        return TransformManager.CONTENT_CLASS
-    }
-
-    override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
-        return mutableSetOf(
-            QualifiedContent.Scope.PROJECT,
-            QualifiedContent.Scope.SUB_PROJECTS,
-            QualifiedContent.Scope.EXTERNAL_LIBRARIES
-        )
-    }
-
-    override fun getName(): String {
-        return "OptimizedThreadTransform"
-    }
-
-    override fun isIncremental(): Boolean {
-        return true
     }
 
 }

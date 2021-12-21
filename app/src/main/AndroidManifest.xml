@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="github.leavesc.asm">
 
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -23,6 +25,9 @@
             android:exported="false" />
         <activity
             android:name=".optimized_thread.OptimizedThreadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".privacy_sentry.PrivacySentryActivity"
             android:exported="false" />
     </application>
 

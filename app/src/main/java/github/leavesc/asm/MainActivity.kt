@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import github.leavesc.asm.double_click.ViewDoubleClickCheckActivity
 import github.leavesc.asm.optimized_thread.OptimizedThreadActivity
+import github.leavesc.asm.privacy_sentry.PrivacySentryActivity
 
 /**
  * @Author: leavesC
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<TextView>(R.id.tvOptimizedThread).setOnClickListener {
             startActivity(Intent(this, OptimizedThreadActivity::class.java))
+        }
+        findViewById<TextView>(R.id.tvPrivacySentry).setOnClickListener {
+            startActivity(Intent(this, PrivacySentryActivity::class.java))
         }
     }
 

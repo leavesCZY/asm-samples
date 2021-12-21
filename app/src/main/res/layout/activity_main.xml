@@ -20,4 +20,12 @@
         android:text="线程池优化"
         android:textAllCaps="false" />
 
+    <Button
+        android:id="@+id/tvPrivacySentry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="隐私合规"
+        android:textAllCaps="false" />
+
 </LinearLayout>
