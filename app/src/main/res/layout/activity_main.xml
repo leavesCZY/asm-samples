@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="双击检查"
+        android:text="双击防抖"
         android:textAllCaps="false" />
 
     <Button
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="线程池优化"
+        android:text="线程整治"
         android:textAllCaps="false" />
 
     <Button
