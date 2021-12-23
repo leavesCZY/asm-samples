@@ -6,18 +6,40 @@ package github.leavesc.asm.plugins.privacy_sentry
  * @Desc:
  * @Github：https://github.com/leavesC
  */
-data class PrivacySentryConfig(val hookPointList: List<PrivacySentryHookPoint> = hookPoints)
+data class PrivacySentryConfig(
+    val fieldHookPointList: List<PrivacySentryFieldHookPoint> = filedHookPoints,
+    val methodHookPointList: List<PrivacySentryMethodHookPoint> = methodHookPoints
+)
 
-private val hookPoints = listOf(
-    PrivacySentryHookPoint(
-        methodOwner = "android/telephony/TelephonyManager",
-        methodName = "getDeviceId",
-        methodDesc = "()Ljava/lang/String;"
+private val methodHookPoints = listOf(
+    PrivacySentryMethodHookPoint(
+        owner = "android/telephony/TelephonyManager",
+        name = "getDeviceId",
+        desc = "()Ljava/lang/String;"
+    ),
+    PrivacySentryMethodHookPoint(
+        owner = "android.os.Build",
+        name = "getDeviceId",
+        desc = "()Ljava/lang/String;"
     ),
 )
 
-data class PrivacySentryHookPoint(
-    val methodOwner: String,
-    val methodName: String,
-    val methodDesc: String
+private val filedHookPoints = listOf(
+    PrivacySentryFieldHookPoint(
+        owner = "android.os.Build",
+        name = "BRAND",
+        desc = "Ljava/lang/String;"
+    ),
+)
+
+data class PrivacySentryMethodHookPoint(
+    val owner: String,
+    val name: String,
+    val desc: String
+)
+
+data class PrivacySentryFieldHookPoint(
+    val owner: String,
+    val name: String,
+    val desc: String
 )

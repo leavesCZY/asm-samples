@@ -9,8 +9,16 @@
         android:id="@+id/btnGetDeviceId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="获取 Device ID"
+        android:layout_margin="10dp"
+        android:text="Get Device ID"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnGetDeviceBrand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Get Device Brand"
         android:textAllCaps="false" />
 
     <ScrollView

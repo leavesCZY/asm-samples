@@ -1,12 +1,8 @@
 package github.leavesc.asm.privacy_sentry
 
-import android.app.Service
-import android.content.Context
 import android.os.Bundle
-import android.telephony.TelephonyManager
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import github.leavesc.asm.R
 
@@ -23,6 +19,10 @@ class PrivacySentryActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnGetDeviceId)
     }
 
+    private val btnGetDeviceBrand by lazy {
+        findViewById<Button>(R.id.btnGetDeviceBrand)
+    }
+
     private val tvLog by lazy {
         findViewById<TextView>(R.id.tvLog)
     }
@@ -31,19 +31,10 @@ class PrivacySentryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_privacy_sentry)
         btnGetDeviceId.setOnClickListener {
-            tvLog.text = "deviceId: " + getDeviceId(this)
+            tvLog.append("\n" + "deviceId: " + DeviceUtils.getDeviceId(this))
         }
-    }
-
-    private fun getDeviceId(context: Context): String {
-        return try {
-            val telephonyManager =
-                context.getSystemService(Service.TELEPHONY_SERVICE) as TelephonyManager
-            telephonyManager.deviceId
-        } catch (e: Throwable) {
-            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
-            e.printStackTrace()
-            ""
+        btnGetDeviceBrand.setOnClickListener {
+            tvLog.append("\n" + "brand: " + DeviceUtils.getBrand())
         }
     }
 

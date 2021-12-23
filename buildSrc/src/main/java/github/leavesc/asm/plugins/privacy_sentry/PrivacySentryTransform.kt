@@ -5,6 +5,7 @@ import github.leavesc.asm.utils.Log
 import github.leavesc.asm.utils.simpleClassName
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.FieldInsnNode
 import org.objectweb.asm.tree.MethodInsnNode
 
 /**
@@ -20,26 +21,44 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
         val classReader = ClassReader(byteArray)
         classReader.accept(classNode, ClassReader.EXPAND_FRAMES)
         val methods = classNode.methods
-        val hookPoints = config.hookPointList
+        val methodHookPoints = config.methodHookPointList
+        val fieldHookPoints = config.fieldHookPointList
         if (!methods.isNullOrEmpty()) {
             for (methodNode in methods) {
-                val instructionIterator = methodNode.instructions?.iterator()
+                val instructions = methodNode.instructions
+                val instructionIterator = instructions?.iterator()
                 if (instructionIterator != null) {
                     while (instructionIterator.hasNext()) {
-                        val instruction = instructionIterator.next()
-                        if (instruction is MethodInsnNode) {
-                            val owner = instruction.owner
-                            val desc = instruction.desc
-                            val name = instruction.name
-                            val find = hookPoints.find {
-                                it.methodOwner == owner && it.methodDesc == desc
-                                        && it.methodName == name
+                        when (val instruction = instructionIterator.next()) {
+                            is MethodInsnNode -> {
+                                val owner = instruction.owner
+                                val desc = instruction.desc
+                                val name = instruction.name
+                                val find = methodHookPoints.find {
+                                    it.owner == owner && it.desc == desc
+                                            && it.name == name
+                                }
+                                if (find != null) {
+                                    Log.log(
+                                        "PrivacySentryTransform " + classNode.simpleClassName
+                                                + " _ " + owner + " _ " + desc + " " + name
+                                    )
+                                }
                             }
-                            if (find != null) {
-                                Log.log(
-                                    " PrivacySentryTransform " + classNode.simpleClassName
-                                            + " _ " + owner + " _ " + desc + " " + name
-                                )
+                            is FieldInsnNode -> {
+                                val owner = instruction.owner
+                                val desc = instruction.desc
+                                val name = instruction.name
+                                val find = fieldHookPoints.find {
+                                    it.owner == owner && it.desc == desc
+                                            && it.name == name
+                                }
+                                if (find != null) {
+                                    Log.log(
+                                        "PrivacySentryTransform " + classNode.simpleClassName
+                                                + " _ " + owner + " _ " + desc + " " + name
+                                    )
+                                }
                             }
                         }
                     }
