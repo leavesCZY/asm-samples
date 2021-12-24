@@ -31,6 +31,7 @@ abstract class BaseTransform : Transform() {
 
     override fun transform(transformInvocation: TransformInvocation) {
         Log.log("transform start--------------->")
+        onTransformStart()
         val startTime = System.currentTimeMillis()
         val inputs = transformInvocation.inputs
         val outputProvider = transformInvocation.outputProvider
@@ -52,7 +53,16 @@ abstract class BaseTransform : Transform() {
             }
         }
         executorService.invokeAll(taskList)
+        onTransformEnd()
         Log.log("transform end--------------->" + "duration : " + (System.currentTimeMillis() - startTime) + " ms")
+    }
+
+    protected open fun onTransformStart() {
+
+    }
+
+    protected open fun onTransformEnd() {
+
     }
 
     private fun forEachJar(

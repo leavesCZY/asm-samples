@@ -1,5 +1,7 @@
 package github.leavesc.asm.utils
 
+import java.util.concurrent.Executors
+
 /**
  * @Author: leavesC
  * @Date: 2021/12/8 10:57
@@ -7,8 +9,12 @@ package github.leavesc.asm.utils
  */
 object Log {
 
+    private val logThreadExecutor = Executors.newSingleThreadExecutor()
+
     fun log(log: Any?) {
-        println("ASM: $log")
+        logThreadExecutor.submit {
+            println("ASM: $log")
+        }
     }
 
 }
