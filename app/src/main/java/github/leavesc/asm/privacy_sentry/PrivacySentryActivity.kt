@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import github.leavesc.asm.R
 
-
 /**
  * @Author: leavesC
  * @Date: 2021/12/21 23:02

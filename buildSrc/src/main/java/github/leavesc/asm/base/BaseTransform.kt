@@ -52,7 +52,10 @@ abstract class BaseTransform : Transform() {
                 }
             }
         }
-        executorService.invokeAll(taskList)
+        val taskListFeature = executorService.invokeAll(taskList)
+        taskListFeature.forEach {
+            it.get()
+        }
         onTransformEnd()
         Log.log("transform end--------------->" + "duration : " + (System.currentTimeMillis() - startTime) + " ms")
     }

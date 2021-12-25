@@ -12,9 +12,9 @@ import org.gradle.kotlin.dsl.getByType
  */
 class DoubleClickPlugin : Plugin<Project> {
 
-    override fun apply(target: Project) {
+    override fun apply(project: Project) {
         val config = DoubleClickConfig()
-        val appExtension: AppExtension = target.extensions.getByType()
+        val appExtension: AppExtension = project.extensions.getByType()
         appExtension.registerTransform(DoubleClickTransform(config))
     }
 

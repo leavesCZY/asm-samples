@@ -12,8 +12,8 @@ import org.gradle.kotlin.dsl.getByType
  */
 class OptimizedThreadPlugin : Plugin<Project> {
 
-    override fun apply(target: Project) {
-        val appExtension: AppExtension = target.extensions.getByType()
+    override fun apply(project: Project) {
+        val appExtension: AppExtension = project.extensions.getByType()
         appExtension.registerTransform(OptimizedThreadTransform(OptimizedThreadConfig()))
     }
 

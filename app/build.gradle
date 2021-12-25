@@ -16,6 +16,11 @@ def keyAliasExt = "leavesc"
 def keyPasswordExt = "123456"
 def storePasswordExt = "123456"
 
+PrivacySentry {
+    methodOwner = "github.leavesc.asm.privacy_sentry.PrivacySentryFileUtils"
+    methodName = "writeToFile"
+}
+
 android {
     compileSdk 31
     defaultConfig {
@@ -73,6 +78,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation "com.jakewharton:butterknife:$butter_knife_version"
     kapt "com.jakewharton:butterknife-compiler:$butter_knife_version"
+    implementation 'commons-io:commons-io:2.6'
     implementation project(path: ':double_click')
     implementation project(path: ':library')
 }

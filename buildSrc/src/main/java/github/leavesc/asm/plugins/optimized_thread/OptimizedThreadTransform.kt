@@ -35,8 +35,8 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
         val classReader = ClassReader(byteArray)
         classReader.accept(classNode, ClassReader.EXPAND_FRAMES)
         val methods = classNode.methods
-        val taskList = mutableListOf<() -> Unit>()
         if (!methods.isNullOrEmpty()) {
+            val taskList = mutableListOf<() -> Unit>()
             for (methodNode in methods) {
                 val instructionIterator = methodNode.instructions?.iterator()
                 if (instructionIterator != null) {
@@ -74,9 +74,9 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                     }
                 }
             }
-        }
-        taskList.forEach {
-            it.invoke()
+            taskList.forEach {
+                it.invoke()
+            }
         }
         val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
         classNode.accept(classWriter)

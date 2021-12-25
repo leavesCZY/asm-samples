@@ -3,6 +3,7 @@ package github.leavesc.asm.plugins.privacy_sentry
 import com.android.build.gradle.AppExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
 
 /**
@@ -13,8 +14,20 @@ import org.gradle.kotlin.dsl.getByType
  */
 class PrivacySentryPlugin : Plugin<Project> {
 
-    override fun apply(target: Project) {
-        val appExtension: AppExtension = target.extensions.getByType()
+    companion object {
+
+        private const val EXT_NAME = "PrivacySentry"
+
+    }
+
+    override fun apply(project: Project) {
+        project.extensions.create<PrivacySentryGradleConfig>(EXT_NAME)
+        project.afterEvaluate {
+            val config = (extensions.findByName(EXT_NAME) as? PrivacySentryGradleConfig)
+                ?: PrivacySentryGradleConfig()
+            config.transform()
+        }
+        val appExtension: AppExtension = project.extensions.getByType()
         appExtension.registerTransform(
             PrivacySentryTransform(
                 config = PrivacySentryConfig()

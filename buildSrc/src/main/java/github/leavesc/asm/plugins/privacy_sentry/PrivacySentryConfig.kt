@@ -9,7 +9,13 @@ package github.leavesc.asm.plugins.privacy_sentry
 data class PrivacySentryConfig(
     val fieldHookPointList: List<PrivacySentryHookPoint> = filedHookPoints,
     val methodHookPointList: List<PrivacySentryHookPoint> = methodHookPoints
-)
+) {
+
+    companion object {
+        var runtimeRecord: PrivacySentryRuntimeRecord? = null
+    }
+
+}
 
 private val methodHookPoints = listOf(
     PrivacySentryHookPoint(
@@ -32,3 +38,28 @@ data class PrivacySentryHookPoint(
     val name: String,
     val desc: String
 )
+
+data class PrivacySentryRuntimeRecord(
+    val methodOwner: String,
+    val methodName: String,
+    val methodDesc: String
+)
+
+open class PrivacySentryGradleConfig {
+    var methodOwner = ""
+    var methodName = ""
+    private val methodDesc = "(Ljava/lang/String;)V"
+
+    fun transform() {
+        if (methodOwner.isBlank() || methodName.isBlank()) {
+            PrivacySentryConfig.runtimeRecord = null
+        } else {
+            PrivacySentryConfig.runtimeRecord = PrivacySentryRuntimeRecord(
+                methodOwner = methodOwner.replace('.', '/'),
+                methodName = methodName,
+                methodDesc = methodDesc
+            )
+        }
+    }
+
+}
