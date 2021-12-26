@@ -15,7 +15,7 @@ object PrivacySentryRecord {
     fun writeToFile(log: String) {
         val logFile = File(MainApplication.application.externalCacheDir, "PrivacySentry.txt")
         val time = simpleDateFormat.format(Date(System.currentTimeMillis()))
-        val logFormat = time + "\n" + log
+        val logFormat = "\n" + time + "\n" + log
         FileUtils.write(
             logFile,
             logFormat,

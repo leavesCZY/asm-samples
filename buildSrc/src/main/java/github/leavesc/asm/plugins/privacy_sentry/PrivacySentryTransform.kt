@@ -23,9 +23,9 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
 
     companion object {
 
-        private const val printStackTraceMethodName = "printStackTrace"
+        private const val writeToFileMethodName = "writeToFile"
 
-        private const val printStackTraceMethodDesc = "(Ljava/lang/String;)V"
+        private const val writeToFileMethodDesc = "(Ljava/lang/String;Ljava/lang/Throwable;)V"
 
     }
 
@@ -86,7 +86,7 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
                 }
                 val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
                 classNode.accept(classWriter)
-                generatePrintStackTraceMethod(classWriter, mRuntimeRecord)
+                generateWriteToFileMethod(classWriter, mRuntimeRecord)
                 return classWriter.toByteArray()
             }
         }
@@ -164,43 +164,43 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
         methodNode: MethodNode,
         hokeInstruction: AbstractInsnNode
     ) {
-        val lintLog = getLintLog(classNode, methodNode, hokeInstruction)
-        lintLog.insert(0, "\n")
         val insnList = InsnList()
-        insnList.add(LdcInsnNode(lintLog.toString()))
-        insnList.add(
-            MethodInsnNode(
-                Opcodes.INVOKESTATIC,
-                classNode.name,
-                printStackTraceMethodName,
-                printStackTraceMethodDesc
+        insnList.apply {
+            val lintLog = getLintLog(classNode, methodNode, hokeInstruction)
+            lintLog.append("\n")
+            add(LdcInsnNode(lintLog.toString()))
+            add(TypeInsnNode(Opcodes.NEW, "java/lang/Throwable"))
+            add(InsnNode(Opcodes.DUP))
+            add(
+                MethodInsnNode(
+                    Opcodes.INVOKESPECIAL, "java/lang/Throwable",
+                    "<init>", "()V", false
+                )
             )
-        )
-        methodNode.instructions.insert(insnList)
+            add(
+                MethodInsnNode(
+                    Opcodes.INVOKESTATIC,
+                    classNode.name,
+                    writeToFileMethodName,
+                    writeToFileMethodDesc
+                )
+            )
+        }
+        methodNode.instructions.insertBefore(hokeInstruction, insnList)
     }
 
-    private fun generatePrintStackTraceMethod(
+    private fun generateWriteToFileMethod(
         classWriter: ClassWriter,
         runtimeRecord: PrivacySentryRuntimeRecord
     ) {
         val methodVisitor = classWriter.visitMethod(
             Opcodes.ACC_PRIVATE or Opcodes.ACC_STATIC,
-            printStackTraceMethodName,
-            printStackTraceMethodDesc,
+            writeToFileMethodName,
+            writeToFileMethodDesc,
             null,
             null
         )
         methodVisitor.visitCode()
-        methodVisitor.visitTypeInsn(Opcodes.NEW, "java/lang/Throwable")
-        methodVisitor.visitInsn(Opcodes.DUP)
-        methodVisitor.visitMethodInsn(
-            Opcodes.INVOKESPECIAL,
-            "java/lang/Throwable",
-            "<init>",
-            "()V",
-            false
-        )
-        methodVisitor.visitVarInsn(Opcodes.ASTORE, 1)
         methodVisitor.visitTypeInsn(Opcodes.NEW, "java/io/ByteArrayOutputStream")
         methodVisitor.visitInsn(Opcodes.DUP)
         methodVisitor.visitMethodInsn(
@@ -229,6 +229,15 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
             "(Ljava/io/PrintStream;)V",
             false
         )
+        methodVisitor.visitVarInsn(Opcodes.ALOAD, 2)
+        methodVisitor.visitMethodInsn(
+            Opcodes.INVOKEVIRTUAL,
+            "java/io/ByteArrayOutputStream",
+            "toString",
+            "()Ljava/lang/String;",
+            false
+        )
+        methodVisitor.visitVarInsn(Opcodes.ASTORE, 3)
         methodVisitor.visitTypeInsn(Opcodes.NEW, "java/lang/StringBuilder")
         methodVisitor.visitInsn(Opcodes.DUP)
         methodVisitor.visitMethodInsn(
@@ -246,12 +255,12 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
             "(Ljava/lang/String;)Ljava/lang/StringBuilder;",
             false
         )
-        methodVisitor.visitVarInsn(Opcodes.ALOAD, 2)
+        methodVisitor.visitVarInsn(Opcodes.ALOAD, 3)
         methodVisitor.visitMethodInsn(
             Opcodes.INVOKEVIRTUAL,
             "java/lang/StringBuilder",
             "append",
-            "(Ljava/lang/Object;)Ljava/lang/StringBuilder;",
+            "(Ljava/lang/String;)Ljava/lang/StringBuilder;",
             false
         )
         methodVisitor.visitMethodInsn(
@@ -261,8 +270,8 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
             "()Ljava/lang/String;",
             false
         )
-        methodVisitor.visitVarInsn(Opcodes.ASTORE, 3)
-        methodVisitor.visitVarInsn(Opcodes.ALOAD, 3)
+        methodVisitor.visitVarInsn(Opcodes.ASTORE, 4)
+        methodVisitor.visitVarInsn(Opcodes.ALOAD, 4)
         methodVisitor.visitMethodInsn(
             Opcodes.INVOKESTATIC,
             runtimeRecord.methodOwner,
@@ -271,7 +280,7 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
             false
         )
         methodVisitor.visitInsn(Opcodes.RETURN)
-        methodVisitor.visitMaxs(4, 4)
+        methodVisitor.visitMaxs(4, 5)
         methodVisitor.visitEnd()
     }
 
