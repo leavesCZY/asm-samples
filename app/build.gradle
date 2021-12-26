@@ -17,7 +17,7 @@ def keyPasswordExt = "123456"
 def storePasswordExt = "123456"
 
 PrivacySentry {
-    methodOwner = "github.leavesc.asm.privacy_sentry.PrivacySentryFileUtils"
+    methodOwner = "github.leavesc.asm.privacy_sentry.PrivacySentryRecord"
     methodName = "writeToFile"
 }
 

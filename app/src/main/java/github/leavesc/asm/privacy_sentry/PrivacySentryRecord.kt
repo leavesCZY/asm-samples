@@ -7,7 +7,7 @@ import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 
-object PrivacySentryFileUtils {
+object PrivacySentryRecord {
 
     private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.CHINA)
 

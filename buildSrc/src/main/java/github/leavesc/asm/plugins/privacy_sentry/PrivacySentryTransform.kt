@@ -29,7 +29,7 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
 
     }
 
-    private val log = StringBuffer()
+    private val allLintLog = StringBuffer()
 
     private var runtimeRecord: PrivacySentryRuntimeRecord? = null
 
@@ -45,7 +45,7 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
         val mRuntimeRecord = runtimeRecord
         if (!methods.isNullOrEmpty()) {
             val taskList = mutableListOf<() -> Unit>()
-            val tempLog = StringBuilder()
+            val tempLintLog = StringBuilder()
             for (methodNode in methods) {
                 val instructions = methodNode.instructions
                 val instructionIterator = instructions?.iterator()
@@ -53,26 +53,34 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
                     while (instructionIterator.hasNext()) {
                         val instruction = instructionIterator.next()
                         if (instruction.isHookPoint()) {
-                            val instructionLog = recordLog(classNode, instruction)
-                            tempLog.append(instructionLog)
+                            val lintLog = getLintLog(
+                                classNode,
+                                methodNode,
+                                instruction
+                            )
+                            tempLintLog.append(lintLog)
+                            tempLintLog.append("\n\n")
+
                             if (mRuntimeRecord != null) {
                                 taskList.add {
                                     insertRuntimeLog(
                                         classNode,
                                         methodNode,
-                                        instructionLog.toString()
+                                        instruction
                                     )
                                 }
                             }
                             Log.log(
-                                "PrivacySentryTransform $instructionLog"
+                                "PrivacySentryTransform $lintLog"
                             )
                         }
                     }
                 }
             }
+            if (tempLintLog.isNotBlank()) {
+                allLintLog.append(tempLintLog)
+            }
             if (taskList.isNotEmpty() && mRuntimeRecord != null) {
-                log.append(tempLog)
                 taskList.forEach {
                     it.invoke()
                 }
@@ -86,14 +94,12 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
     }
 
     private fun AbstractInsnNode.isHookPoint(): Boolean {
-        val methodHookPoints = config.methodHookPointList
-        val fieldHookPoints = config.fieldHookPointList
         when (this) {
             is MethodInsnNode -> {
                 val owner = this.owner
                 val desc = this.desc
                 val name = this.name
-                val find = methodHookPoints.find {
+                val find = config.methodHookPointList.find {
                     it.owner == owner && it.desc == desc
                             && it.name == name
                 }
@@ -103,7 +109,7 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
                 val owner = this.owner
                 val desc = this.desc
                 val name = this.name
-                val find = fieldHookPoints.find {
+                val find = config.fieldHookPointList.find {
                     it.owner == owner && it.desc == desc && it.name == name
                 }
                 return find != null
@@ -112,11 +118,14 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
         return false
     }
 
-    private fun recordLog(
+    private fun getLintLog(
         classNode: ClassNode,
+        methodNode: MethodNode,
         hokeInstruction: AbstractInsnNode
     ): StringBuilder {
         val classPath = classNode.name
+        val methodName = methodNode.name
+        val methodDesc = methodNode.desc
         val owner: String
         val desc: String
         val name: String
@@ -135,25 +144,30 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
                 throw RuntimeException("非法指令")
             }
         }
-        val tempLog = StringBuilder()
-        tempLog.append(classPath)
-        tempLog.append("\n")
-        tempLog.append(owner)
-        tempLog.append("\n")
-        tempLog.append(desc)
-        tempLog.append("\n")
-        tempLog.append(name)
-        tempLog.append("\n\n")
-        return tempLog
+        val lintLog = StringBuilder()
+        lintLog.append(classPath)
+        lintLog.append("  ->  ")
+        lintLog.append(methodName)
+        lintLog.append("  ->  ")
+        lintLog.append(methodDesc)
+        lintLog.append("\n")
+        lintLog.append(owner)
+        lintLog.append("  ->  ")
+        lintLog.append(name)
+        lintLog.append("  ->  ")
+        lintLog.append(desc)
+        return lintLog
     }
 
     private fun insertRuntimeLog(
         classNode: ClassNode,
         methodNode: MethodNode,
-        log: String
+        hokeInstruction: AbstractInsnNode
     ) {
+        val lintLog = getLintLog(classNode, methodNode, hokeInstruction)
+        lintLog.insert(0, "\n")
         val insnList = InsnList()
-        insnList.add(LdcInsnNode(log))
+        insnList.add(LdcInsnNode(lintLog.toString()))
         insnList.add(
             MethodInsnNode(
                 Opcodes.INVOKESTATIC,
@@ -262,8 +276,8 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
     }
 
     override fun onTransformEnd() {
-        if (log.isNotEmpty()) {
-            FileUtils.write(generateLogFile(), log, Charset.defaultCharset())
+        if (allLintLog.isNotEmpty()) {
+            FileUtils.write(generateLogFile(), allLintLog, Charset.defaultCharset())
         }
         runtimeRecord = null
     }
