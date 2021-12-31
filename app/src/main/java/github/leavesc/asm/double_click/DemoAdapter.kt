@@ -1,9 +1,9 @@
-package github.leavesc.library.double_click
+package github.leavesc.asm.double_click
 
 import android.graphics.Color
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import github.leavesc.library.R
+import github.leavesc.asm.R
 
 /**
  * @Author: leavesC

@@ -1,6 +1,5 @@
 package github.leavesc.asm.double_click
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -11,8 +10,6 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.chad.library.adapter.base.BaseQuickAdapter
 import github.leavesc.asm.R
-import github.leavesc.library.double_click.DemoAdapter
-import github.leavesc.library.double_click.ViewDoubleClickCheckLibraryActivity
 
 /**
  * @Author: leavesC
@@ -43,9 +40,6 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
         })
         findViewById<TextView>(R.id.tvLambda).setOnClickListener {
             onClickView()
-        }
-        findViewById<TextView>(R.id.tvLibrary).setOnClickListener {
-            startActivity(Intent(this, ViewDoubleClickCheckLibraryActivity::class.java))
         }
         ButterKnife.bind(this)
 

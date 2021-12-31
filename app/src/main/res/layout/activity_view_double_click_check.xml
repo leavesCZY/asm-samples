@@ -73,14 +73,6 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/tvLibrary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="测试 Library"
-        android:textAllCaps="false" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvStringList"
         android:layout_width="match_parent"

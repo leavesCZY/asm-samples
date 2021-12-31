@@ -11,9 +11,10 @@ object PrivacySentryRecord {
 
     private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.CHINA)
 
+    val logFile = File(MainApplication.application.externalCacheDir, "PrivacySentry.txt")
+
     @JvmStatic
     fun writeToFile(log: String) {
-        val logFile = File(MainApplication.application.externalCacheDir, "PrivacySentry.txt")
         val time = simpleDateFormat.format(Date(System.currentTimeMillis()))
         val logFormat = "\n" + time + "\n" + log
         FileUtils.write(

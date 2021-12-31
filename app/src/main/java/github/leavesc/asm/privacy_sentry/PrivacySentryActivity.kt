@@ -1,6 +1,7 @@
 package github.leavesc.asm.privacy_sentry
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,12 +30,18 @@ class PrivacySentryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_privacy_sentry)
+        showLog("可以通过 adb 命令导出运行时记录的文件到当前工程目录下：adb pull ${PrivacySentryRecord.logFile.absolutePath} ")
         btnGetDeviceId.setOnClickListener {
-            tvLog.append("\n" + "deviceId: " + DeviceUtils.getDeviceId(this))
+            showLog("deviceId: " + DeviceUtils.getDeviceId(this))
         }
         btnGetDeviceBrand.setOnClickListener {
-            tvLog.append("\n" + "brand: " + DeviceUtils.getBrand())
+            showLog("brand: " + DeviceUtils.getBrand())
         }
+    }
+
+    private fun showLog(log: String) {
+        tvLog.append("\n" + log)
+        Log.e("PrivacySentryActivity", log)
     }
 
 }

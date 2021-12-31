@@ -76,9 +76,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50"
     implementation "com.jakewharton:butterknife:$butter_knife_version"
     kapt "com.jakewharton:butterknife-compiler:$butter_knife_version"
     implementation 'commons-io:commons-io:2.6'
     implementation project(path: ':double_click')
-    implementation project(path: ':library')
 }
