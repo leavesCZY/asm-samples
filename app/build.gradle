@@ -4,27 +4,27 @@ plugins {
     id 'kotlin-kapt'
 }
 
-import github.leavesc.asm.plugins.double_click.DoubleClickPlugin
-import github.leavesc.asm.plugins.optimized_thread.OptimizedThreadPlugin
-import github.leavesc.asm.plugins.privacy_sentry.PrivacySentryPlugin
+import github.leavesczy.asm.plugins.double_click.DoubleClickPlugin
+import github.leavesczy.asm.plugins.optimized_thread.OptimizedThreadPlugin
+import github.leavesczy.asm.plugins.privacy_sentry.PrivacySentryPlugin
 
 apply plugin: DoubleClickPlugin
 apply plugin: OptimizedThreadPlugin
 apply plugin: PrivacySentryPlugin
 
-def keyAliasExt = "leavesc"
+def keyAliasExt = "leavesCZY"
 def keyPasswordExt = "123456"
 def storePasswordExt = "123456"
 
 PrivacySentry {
-    methodOwner = "github.leavesc.asm.privacy_sentry.PrivacySentryRecord"
+    methodOwner = "github.leavesczy.asm.privacy_sentry.PrivacySentryRecord"
     methodName = "writeToFile"
 }
 
 android {
     compileSdk 31
     defaultConfig {
-        applicationId "github.leavesc.asm_transform"
+        applicationId "github.leavesczy.asm_transform"
         minSdk 23
         targetSdk 30
         versionCode 1
