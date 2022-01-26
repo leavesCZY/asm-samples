@@ -1,6 +1,5 @@
 package github.leavesczy.asm.utils
 
-import github.leavesczy.asm.plugins.double_click.DoubleClickConfig
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import org.objectweb.asm.tree.ClassNode
@@ -39,33 +38,7 @@ fun MethodInsnNode.insertArgument(argumentType: Class<*>) {
     desc = Type.getMethodDescriptor(returnType, *newArgumentTypes)
 }
 
-fun ClassNode.isHookPoint(config: DoubleClickConfig, methodNode: MethodNode): Boolean {
-    val myInterfaces = interfaces
-    if (myInterfaces.isNullOrEmpty()) {
-        return false
-    }
-    val extraHookMethodList = config.hookPointList
-    extraHookMethodList.forEach {
-        if (myInterfaces.contains(it.interfaceName) && methodNode.nameWithDesc == it.methodSign) {
-            return true
-        }
-    }
-    return false
-}
-
-fun MethodNode.findHookPointLambda(config: DoubleClickConfig): List<InvokeDynamicInsnNode> {
-    val onClickListenerLambda = findLambda {
-        val nodeName = it.name
-        val nodeDesc = it.desc
-        val find = config.hookPointList.find { point ->
-            nodeName == point.methodName && nodeDesc.endsWith(point.interfaceSignSuffix)
-        }
-        return@findLambda find != null
-    }
-    return onClickListenerLambda
-}
-
-private fun MethodNode.findLambda(
+fun MethodNode.findLambda(
     filter: (InvokeDynamicInsnNode) -> Boolean
 ): List<InvokeDynamicInsnNode> {
     val handleList = mutableListOf<InvokeDynamicInsnNode>()

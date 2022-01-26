@@ -3,7 +3,10 @@ package github.leavesczy.asm.plugins.double_click
 import com.android.build.api.transform.QualifiedContent
 import com.android.build.gradle.internal.pipeline.TransformManager
 import github.leavesczy.asm.base.BaseTransform
-import github.leavesczy.asm.utils.*
+import github.leavesczy.asm.utils.findLambda
+import github.leavesczy.asm.utils.hasAnnotation
+import github.leavesczy.asm.utils.isStatic
+import github.leavesczy.asm.utils.nameWithDesc
 import org.objectweb.asm.*
 import org.objectweb.asm.tree.*
 
@@ -122,6 +125,32 @@ class DoubleClickTransform(private val config: DoubleClickConfig) : BaseTransfor
             }
         }
         return byteArray
+    }
+
+    private fun ClassNode.isHookPoint(config: DoubleClickConfig, methodNode: MethodNode): Boolean {
+        val myInterfaces = interfaces
+        if (myInterfaces.isNullOrEmpty()) {
+            return false
+        }
+        val extraHookMethodList = config.hookPointList
+        extraHookMethodList.forEach {
+            if (myInterfaces.contains(it.interfaceName) && methodNode.nameWithDesc == it.methodSign) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun MethodNode.findHookPointLambda(config: DoubleClickConfig): List<InvokeDynamicInsnNode> {
+        val onClickListenerLambda = findLambda {
+            val nodeName = it.name
+            val nodeDesc = it.desc
+            val find = config.hookPointList.find { point ->
+                nodeName == point.methodName && nodeDesc.endsWith(point.interfaceSignSuffix)
+            }
+            return@findLambda find != null
+        }
+        return onClickListenerLambda
     }
 
     override fun getInputTypes(): Set<QualifiedContent.ContentType> {
