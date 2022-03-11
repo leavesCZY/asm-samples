@@ -1,3 +1,3 @@
 rootProject.name = "ASM_Transform"
 include ':app'
-include ':double_click'
+include ':doubleClick'

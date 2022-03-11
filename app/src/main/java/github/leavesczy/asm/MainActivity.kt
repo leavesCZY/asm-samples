@@ -4,9 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import github.leavesczy.asm.double_click.ViewDoubleClickCheckActivity
-import github.leavesczy.asm.optimized_thread.OptimizedThreadActivity
-import github.leavesczy.asm.privacy_sentry.PrivacySentryActivity
+import github.leavesczy.asm.doubleClick.ViewDoubleClickCheckActivity
+import github.leavesczy.asm.legalBitmap.LegalBitmapActivity
+import github.leavesczy.asm.optimizedThread.OptimizedThreadActivity
+import github.leavesczy.asm.privacySentry.PrivacySentryActivity
 
 /**
  * @Author: leavesCZY
@@ -27,6 +28,9 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<TextView>(R.id.tvPrivacySentry).setOnClickListener {
             startActivity(Intent(this, PrivacySentryActivity::class.java))
+        }
+        findViewById<TextView>(R.id.tvLegalBitmap).setOnClickListener {
+            startActivity(Intent(this, LegalBitmapActivity::class.java))
         }
     }
 

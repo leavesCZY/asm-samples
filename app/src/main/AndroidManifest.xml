@@ -3,6 +3,7 @@
     package="github.leavesczy.asm">
 
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".MainApplication"
@@ -22,13 +23,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".double_click.ViewDoubleClickCheckActivity"
+            android:name=".doubleClick.ViewDoubleClickCheckActivity"
             android:exported="false" />
         <activity
-            android:name=".optimized_thread.OptimizedThreadActivity"
+            android:name=".optimizedThread.OptimizedThreadActivity"
             android:exported="false" />
         <activity
-            android:name=".privacy_sentry.PrivacySentryActivity"
+            android:name=".privacySentry.PrivacySentryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".legalBitmap.LegalBitmapActivity"
             android:exported="false" />
     </application>
 

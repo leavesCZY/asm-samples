@@ -4,20 +4,23 @@ plugins {
     id 'kotlin-kapt'
 }
 
-import github.leavesczy.asm.plugins.double_click.DoubleClickPlugin
-import github.leavesczy.asm.plugins.optimized_thread.OptimizedThreadPlugin
-import github.leavesczy.asm.plugins.privacy_sentry.PrivacySentryPlugin
+
+import github.leavesczy.asm.plugins.doubleClick.DoubleClickPlugin
+import github.leavesczy.asm.plugins.legalBitmap.LegalBitmapPlugin
+import github.leavesczy.asm.plugins.optimizedThread.OptimizedThreadPlugin
+import github.leavesczy.asm.plugins.privacySentry.PrivacySentryPlugin
 
 apply plugin: DoubleClickPlugin
 apply plugin: OptimizedThreadPlugin
 apply plugin: PrivacySentryPlugin
+apply plugin: LegalBitmapPlugin
 
 def keyAliasExt = "leavesCZY"
 def keyPasswordExt = "123456"
 def storePasswordExt = "123456"
 
 PrivacySentry {
-    methodOwner = "github.leavesczy.asm.privacy_sentry.PrivacySentryRecord"
+    methodOwner = "github.leavesczy.asm.privacySentry.PrivacySentryRecord"
     methodName = "writeToFile"
 }
 
@@ -80,5 +83,5 @@ dependencies {
     implementation "com.jakewharton:butterknife:$butter_knife_version"
     kapt "com.jakewharton:butterknife-compiler:$butter_knife_version"
     implementation 'commons-io:commons-io:2.6'
-    implementation project(path: ':double_click')
+    implementation project(path: ':doubleClick')
 }

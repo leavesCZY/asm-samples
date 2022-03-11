@@ -28,4 +28,12 @@
         android:text="隐私合规"
         android:textAllCaps="false" />
 
+    <Button
+        android:id="@+id/tvLegalBitmap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="大图检测"
+        android:textAllCaps="false" />
+
 </LinearLayout>
