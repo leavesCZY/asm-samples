@@ -1,5 +1,6 @@
 package github.leavesczy.asm.doubleClick
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -26,7 +27,6 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
         setContentView(R.layout.activity_view_double_click_check)
         findViewById<TextView>(R.id.tvObjectUnCheck).setOnClickListener(object :
             View.OnClickListener {
-
             @UncheckViewOnClick
             override fun onClick(v: View) {
                 onClickView()
@@ -43,15 +43,15 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
         }
         ButterKnife.bind(this)
 
-        val demoAdapter = DemoAdapter.get()
-        val rvStringList = findViewById<RecyclerView>(R.id.rvStringList)
-        rvStringList.adapter = demoAdapter
-        rvStringList.layoutManager = LinearLayoutManager(this)
-        demoAdapter.onItemClickListener =
+        val clickDemoAdapter = ClickDemoAdapter()
+        val rvList = findViewById<RecyclerView>(R.id.rvList)
+        rvList.adapter = clickDemoAdapter
+        rvList.layoutManager = LinearLayoutManager(this)
+        clickDemoAdapter.onItemClickListener =
             BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
                 onClickView()
             }
-        demoAdapter.onItemChildClickListener = object : BaseQuickAdapter.OnItemChildClickListener {
+        clickDemoAdapter.onItemChildClickListener = object : BaseQuickAdapter.OnItemChildClickListener {
             override fun onItemChildClick(
                 adapter: BaseQuickAdapter<*, *>?,
                 view: View,
@@ -81,8 +81,9 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvIndex).text = (clickIndex++).toString()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun onClickChildView() {
-        findViewById<TextView>(R.id.tvIndex).text = "onClickChildView" + (clickIndex++).toString()
+        findViewById<TextView>(R.id.tvIndex).text = "onClickChildView " + (clickIndex++)
     }
 
 }

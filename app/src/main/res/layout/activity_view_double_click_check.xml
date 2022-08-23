@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="10dp"
-        android:textSize="20sp"
+        android:padding="8dp"
+        android:textSize="24sp"
         tools:text="111" />
 
     <Button
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="setOnClickListener 匿名内部类 - 不进行防抖检查"
+        android:text="setOnClickListener 匿名内部类\n不防抖"
         android:textAllCaps="false" />
 
     <LinearLayout
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
-            android:text="setOnClickListener 匿名内部类 - 防抖检查"
+            android:text="setOnClickListener 匿名内部类\n防抖"
             android:textAllCaps="false" />
 
         <Button
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
-            android:text="setOnClickListener lambda - 防抖检查"
+            android:text="setOnClickListener lambda\n防抖"
             android:textAllCaps="false" />
 
     </LinearLayout>
@@ -59,7 +59,7 @@
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:onClick="onClickByXml"
-            android:text="xml onClick - 防抖检查"
+            android:text="xml onClick\n防抖"
             android:textAllCaps="false" />
 
         <Button
@@ -68,15 +68,15 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
-            android:text="ButterKnife - 防抖检查"
+            android:text="ButterKnife\n防抖"
             android:textAllCaps="false" />
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvStringList"
+        android:id="@+id/rvList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_string" />
+        tools:listitem="@layout/item_card" />
 
 </LinearLayout>

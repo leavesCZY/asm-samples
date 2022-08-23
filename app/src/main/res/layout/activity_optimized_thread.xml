@@ -10,14 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="向线程池提交任务" />
+        android:text="向线程池提交任务"
+        android:textAllCaps="false"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/btnAnonymousThread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="启动匿名线程" />
+        android:text="启动匿名线程"
+        android:textAllCaps="false"
+        android:textSize="18sp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,7 +36,7 @@
             android:layout_gravity="top"
             android:gravity="center_horizontal"
             android:lineSpacingMultiplier="1.1"
-            android:textSize="14sp"
+            android:textSize="18sp"
             tools:text="111111111111111" />
 
     </ScrollView>
