@@ -47,7 +47,7 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                                 val methodInsnNode = instruction as? MethodInsnNode
                                 if (methodInsnNode?.owner == executorsClass) {
                                     taskList.add {
-                                        transformInvokeStatic(
+                                        transformInvokeExecutorsInstruction(
                                             classNode,
                                             methodNode,
                                             instruction
@@ -57,15 +57,17 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                             }
                             Opcodes.NEW -> {
                                 val typeInsnNode = instruction as? TypeInsnNode
-                                if (typeInsnNode?.desc == threadClass) {
-                                    //如果是在 ThreadFactory 内初始化线程，则不处理
-                                    if (!classNode.isThreadFactoryMethod(methodNode)) {
-                                        taskList.add {
-                                            transformNew(
-                                                classNode,
-                                                methodNode,
-                                                instruction
-                                            )
+                                if (typeInsnNode != null) {
+                                    if (typeInsnNode.desc == threadClass) {
+                                        //如果是在 ThreadFactory 内初始化线程，则不处理
+                                        if (!classNode.isThreadFactoryMethod(methodNode)) {
+                                            taskList.add {
+                                                transformNewThreadInstruction(
+                                                    classNode,
+                                                    methodNode,
+                                                    instruction
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -83,7 +85,7 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
         return classWriter.toByteArray()
     }
 
-    private fun transformInvokeStatic(
+    private fun transformInvokeExecutorsInstruction(
         classNode: ClassNode,
         methodNode: MethodNode,
         methodInsnNode: MethodInsnNode
@@ -102,7 +104,7 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
         }
     }
 
-    private fun transformNew(
+    private fun transformNewThreadInstruction(
         classNode: ClassNode,
         methodNode: MethodNode,
         typeInsnNode: TypeInsnNode
