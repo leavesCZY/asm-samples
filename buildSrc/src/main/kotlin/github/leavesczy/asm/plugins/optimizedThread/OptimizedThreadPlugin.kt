@@ -1,9 +1,10 @@
 package github.leavesczy.asm.plugins.optimizedThread
 
-import com.android.build.gradle.AppExtension
+import com.android.build.api.instrumentation.FramesComputationMode
+import com.android.build.api.instrumentation.InstrumentationScope
+import com.android.build.api.variant.AndroidComponentsExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
 
 /**
  * @Author: leavesCZY
@@ -13,8 +14,18 @@ import org.gradle.kotlin.dsl.getByType
 class OptimizedThreadPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val appExtension: AppExtension = project.extensions.getByType()
-        appExtension.registerTransform(OptimizedThreadTransform(OptimizedThreadConfig()))
+        val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
+        androidComponents.onVariants { variant ->
+            variant.instrumentation.transformClassesWith(
+                OptimizedThreadClassVisitorFactory::class.java,
+                InstrumentationScope.ALL
+            ) { params ->
+                params.config.set(OptimizedThreadConfig())
+            }
+            variant.instrumentation.setAsmFramesComputationMode(
+                FramesComputationMode.COMPUTE_FRAMES_FOR_INSTRUMENTED_METHODS
+            )
+        }
     }
 
 }

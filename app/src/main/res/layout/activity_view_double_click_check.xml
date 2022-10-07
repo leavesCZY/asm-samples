@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="8dp"
+        android:padding="5dp"
         android:textSize="24sp"
         tools:text="111" />
 
@@ -18,7 +18,7 @@
         android:id="@+id/tvObjectUnCheck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="5dp"
         android:text="setOnClickListener 匿名内部类\n不防抖"
         android:textAllCaps="false" />
 
@@ -31,47 +31,30 @@
             android:id="@+id/tvObjectCheck"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="setOnClickListener 匿名内部类\n防抖"
+            android:text="setOnClickListener \n 匿名内部类"
             android:textAllCaps="false" />
 
         <Button
             android:id="@+id/tvLambda"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="setOnClickListener lambda\n防抖"
+            android:text="setOnClickListener \n lambda"
             android:textAllCaps="false" />
 
     </LinearLayout>
 
-    <LinearLayout
+    <Button
+        android:id="@+id/tvClickByXml"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/tvClickByXml"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:onClick="onClickByXml"
-            android:text="xml onClick\n防抖"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/tvButterKnife"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:text="ButterKnife\n防抖"
-            android:textAllCaps="false" />
-
-    </LinearLayout>
+        android:layout_margin="5dp"
+        android:onClick="onClickByXml"
+        android:text="xml onClick"
+        android:textAllCaps="false" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvList"

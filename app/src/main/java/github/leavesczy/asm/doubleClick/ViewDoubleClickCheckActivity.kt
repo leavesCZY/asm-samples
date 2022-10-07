@@ -1,15 +1,14 @@
 package github.leavesczy.asm.doubleClick
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.listener.OnItemChildClickListener
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import github.leavesczy.asm.R
 
 /**
@@ -22,54 +21,48 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
 
     private var clickIndex = 1
 
+    @Suppress("ObjectLiteralToLambda")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_double_click_check)
         findViewById<TextView>(R.id.tvObjectUnCheck).setOnClickListener(object :
             View.OnClickListener {
             @UncheckViewOnClick
-            override fun onClick(v: View) {
+            override fun onClick(view: View) {
                 onClickView()
             }
         })
         findViewById<TextView>(R.id.tvObjectCheck).setOnClickListener(object :
             View.OnClickListener {
-            override fun onClick(v: View) {
+            override fun onClick(view: View) {
                 onClickView()
             }
         })
         findViewById<TextView>(R.id.tvLambda).setOnClickListener {
             onClickView()
         }
-        ButterKnife.bind(this)
 
         val clickDemoAdapter = ClickDemoAdapter()
-        val rvList = findViewById<RecyclerView>(R.id.rvList)
-        rvList.adapter = clickDemoAdapter
-        rvList.layoutManager = LinearLayoutManager(this)
-        clickDemoAdapter.onItemClickListener =
-            BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+        clickDemoAdapter.addChildClickViewIds(R.id.viewChild)
+        clickDemoAdapter.setOnItemClickListener(object : OnItemClickListener {
+            override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
                 onClickView()
             }
-        clickDemoAdapter.onItemChildClickListener = object : BaseQuickAdapter.OnItemChildClickListener {
+        })
+        clickDemoAdapter.setOnItemChildClickListener(object : OnItemChildClickListener {
             override fun onItemChildClick(
-                adapter: BaseQuickAdapter<*, *>?,
+                adapter: BaseQuickAdapter<*, *>,
                 view: View,
                 position: Int
             ) {
                 if (view.id == R.id.viewChild) {
-                    onClickChildView()
+                    onClickView()
                 }
             }
-        }
-    }
-
-    @OnClick(R.id.tvButterKnife)
-    fun onClickViewByButterKnife(view: View) {
-        val viewId = view.id
-        if (viewId == R.id.tvButterKnife) {
-            onClickView()
-        }
+        })
+        val rvList = findViewById<RecyclerView>(R.id.rvList)
+        rvList.adapter = clickDemoAdapter
+        rvList.layoutManager = LinearLayoutManager(this)
     }
 
     @CheckViewOnClick
@@ -79,11 +72,6 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
 
     private fun onClickView() {
         findViewById<TextView>(R.id.tvIndex).text = (clickIndex++).toString()
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun onClickChildView() {
-        findViewById<TextView>(R.id.tvIndex).text = "onClickChildView " + (clickIndex++)
     }
 
 }

@@ -10,7 +10,7 @@ import android.view.View
  */
 object ViewDoubleClickCheck {
 
-    private const val MIN_DURATION = 700L
+    private const val MIN_DURATION = 500L
 
     private var lastClickTime = 0L
 

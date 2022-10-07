@@ -1,5 +1,7 @@
 package github.leavesczy.asm.plugins.optimizedThread
 
+import java.io.Serializable
+
 /**
  * @Author: leavesCZY
  * @Date: 2021/12/17 11:02
@@ -9,7 +11,7 @@ class OptimizedThreadConfig(
     private val optimizedThreadClass: String = "github.leavesczy.asm.optimizedThread.OptimizedThread",
     private val optimizedThreadPoolClass: String = "github.leavesczy.asm.optimizedThread.OptimizedExecutors",
     val threadHookPointList: List<ThreadHookPoint> = threadHookPoints,
-) {
+) : Serializable {
 
     val formatOptimizedThreadClass: String
         get() = optimizedThreadClass.replace(".", "/")
@@ -37,6 +39,6 @@ private val threadHookPoints = listOf(
     ),
 )
 
-data class ThreadHookPoint(
+class ThreadHookPoint(
     val methodName: String
-)
+) : Serializable

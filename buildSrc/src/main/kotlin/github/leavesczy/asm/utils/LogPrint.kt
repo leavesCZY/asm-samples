@@ -7,7 +7,7 @@ import java.util.concurrent.Executors
  * @Date: 2021/12/8 10:57
  * @Desc:
  */
-object Log {
+object LogPrint {
 
     private val logThreadExecutor = Executors.newSingleThreadExecutor()
 

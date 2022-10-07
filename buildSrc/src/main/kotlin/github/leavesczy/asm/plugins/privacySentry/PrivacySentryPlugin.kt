@@ -1,6 +1,8 @@
 package github.leavesczy.asm.plugins.privacySentry
 
-import com.android.build.gradle.AppExtension
+import com.android.build.api.instrumentation.FramesComputationMode
+import com.android.build.api.instrumentation.InstrumentationScope
+import com.android.build.api.variant.AndroidComponentsExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
@@ -23,16 +25,21 @@ class PrivacySentryPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.extensions.create<PrivacySentryGradleConfig>(EXT_NAME)
         project.afterEvaluate {
-            val config = (extensions.findByName(EXT_NAME) as? PrivacySentryGradleConfig)
-                ?: PrivacySentryGradleConfig()
+            val config = project.extensions.getByType<PrivacySentryGradleConfig>()
             config.transform()
         }
-        val appExtension: AppExtension = project.extensions.getByType()
-        appExtension.registerTransform(
-            PrivacySentryTransform(
-                config = PrivacySentryConfig()
+        val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
+        androidComponents.onVariants { variant ->
+            variant.instrumentation.transformClassesWith(
+                PrivacySentryClassVisitorFactory::class.java,
+                InstrumentationScope.ALL
+            ) { params ->
+                params.config.set(PrivacySentryConfig())
+            }
+            variant.instrumentation.setAsmFramesComputationMode(
+                FramesComputationMode.COMPUTE_FRAMES_FOR_INSTRUMENTED_METHODS
             )
-        )
+        }
     }
 
 }

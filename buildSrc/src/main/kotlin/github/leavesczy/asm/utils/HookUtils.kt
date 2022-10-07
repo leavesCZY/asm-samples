@@ -38,18 +38,15 @@ fun MethodInsnNode.insertArgument(argumentType: Class<*>) {
     desc = Type.getMethodDescriptor(returnType, *newArgumentTypes)
 }
 
-fun MethodNode.findLambda(
-    filter: (InvokeDynamicInsnNode) -> Boolean
-): List<InvokeDynamicInsnNode> {
-    val handleList = mutableListOf<InvokeDynamicInsnNode>()
-    val instructions = instructions?.iterator() ?: return handleList
-    while (instructions.hasNext()) {
-        val nextInstruction = instructions.next()
-        if (nextInstruction is InvokeDynamicInsnNode) {
-            if (filter(nextInstruction)) {
-                handleList.add(nextInstruction)
+fun MethodNode.filterLambda(filter: (InvokeDynamicInsnNode) -> Boolean): List<InvokeDynamicInsnNode> {
+    val mInstructions = instructions ?: return emptyList()
+    val dynamicList = mutableListOf<InvokeDynamicInsnNode>()
+    mInstructions.forEach { instruction ->
+        if (instruction is InvokeDynamicInsnNode) {
+            if (filter(instruction)) {
+                dynamicList.add(instruction)
             }
         }
     }
-    return handleList
+    return dynamicList
 }

@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger
  * @Author: leavesCZY
  * @Date: 2021/12/18 17:57
  * @Desc:
- * @公众号：字节数组
  */
 class OptimizedThread(runnable: Runnable?, name: String?, className: String) :
     Thread(runnable, generateThreadName(name, className)) {

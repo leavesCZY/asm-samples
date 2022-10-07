@@ -41,39 +41,34 @@ class OptimizedThreadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_optimized_thread)
         btnSubmitTask.setOnClickListener {
-            val task: (String) -> Unit = { threadType ->
-                Thread.sleep(600)
-                val threadName = Thread.currentThread().name
-                runOnUiThread {
-                    tvLog.append("\n\n${threadType}: \n${threadName}")
-                }
-            }
             newFixedThreadPool.execute {
-                task("newFixedThreadPool")
+                printThreadName("newFixedThreadPool")
             }
             newSingleThreadExecutor.execute {
-                task("newSingleThreadExecutor")
+                printThreadName("newSingleThreadExecutor")
             }
             newCachedThreadPool.execute {
-                task("newCachedThreadPool")
+                printThreadName("newCachedThreadPool")
             }
             newSingleThreadScheduledExecutor.execute {
-                task("newSingleThreadScheduledExecutor")
+                printThreadName("newSingleThreadScheduledExecutor")
             }
             newScheduledThreadPool.execute {
-                task("newScheduledThreadPool")
+                printThreadName("newScheduledThreadPool")
             }
-            tvLog.append("\n********************")
         }
         btnAnonymousThread.setOnClickListener {
             Thread {
-                Thread.sleep(600)
-                val threadName = Thread.currentThread().name
-                runOnUiThread {
-                    tvLog.append("\n${threadName}")
-                }
+                printThreadName("newThread")
             }.start()
-            tvLog.append("\n********************")
+        }
+    }
+
+    private fun printThreadName(threadType: String) {
+        Thread.sleep(300)
+        val threadName = Thread.currentThread().name
+        runOnUiThread {
+            tvLog.append("\n\n${threadType}: \n${threadName}")
         }
     }
 

@@ -1,5 +1,6 @@
 package github.leavesczy.asm.privacySentry
 
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.os.Build
@@ -12,6 +13,7 @@ import android.telephony.TelephonyManager
  */
 object DeviceUtils {
 
+    @SuppressLint("MissingPermission")
     fun getDeviceId(context: Context): String {
         return try {
             val telephonyManager =

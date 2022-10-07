@@ -1,15 +1,17 @@
 package github.leavesczy.asm.plugins.privacySentry
 
+import java.io.Serializable
+
 /**
  * @Author: leavesCZY
  * @Date: 2021/12/21 22:59
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-data class PrivacySentryConfig(
+class PrivacySentryConfig(
     val fieldHookPointList: List<PrivacySentryHookPoint> = filedHookPoints,
     val methodHookPointList: List<PrivacySentryHookPoint> = methodHookPoints
-) {
+) : Serializable {
 
     companion object {
         var runtimeRecord: PrivacySentryRuntimeRecord? = null
@@ -33,13 +35,13 @@ private val filedHookPoints = listOf(
     ),
 )
 
-data class PrivacySentryHookPoint(
+class PrivacySentryHookPoint(
     val owner: String,
     val name: String,
     val desc: String
-)
+) : Serializable
 
-data class PrivacySentryRuntimeRecord(
+class PrivacySentryRuntimeRecord(
     val methodOwner: String,
     val methodName: String,
     val methodDesc: String

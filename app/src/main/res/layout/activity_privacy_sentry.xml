@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="Get Device ID"
-        android:textAllCaps="false"
-        android:textSize="18sp" />
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/btnGetDeviceBrand"
@@ -20,8 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="Get Device Brand"
-        android:textAllCaps="false"
-        android:textSize="18sp" />
+        android:textAllCaps="false" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -36,6 +34,7 @@
             android:layout_gravity="top"
             android:gravity="center_horizontal"
             android:lineSpacingMultiplier="1.1"
+            android:textIsSelectable="true"
             android:textSize="18sp"
             tools:text="111111111111111" />
 

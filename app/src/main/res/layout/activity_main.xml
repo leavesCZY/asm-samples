@@ -9,35 +9,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="双击防抖"
-        android:textAllCaps="false"
-        android:textSize="18sp" />
+        android:text="双击防抖" />
 
     <Button
         android:id="@+id/tvOptimizedThread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="线程整治"
-        android:textAllCaps="false"
-        android:textSize="18sp" />
+        android:text="线程整治" />
 
     <Button
         android:id="@+id/tvPrivacySentry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="隐私合规"
-        android:textAllCaps="false"
-        android:textSize="18sp" />
+        android:text="隐私合规" />
 
     <Button
         android:id="@+id/tvLegalBitmap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="大图检测"
-        android:textAllCaps="false"
-        android:textSize="18sp" />
+        android:text="大图检测" />
 
 </LinearLayout>

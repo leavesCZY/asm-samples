@@ -65,6 +65,7 @@ open class MonitorImageView @JvmOverloads constructor(
             is BitmapDrawable -> {
                 drawable.bitmap.byteCount
             }
+
             else -> {
                 0
             }

@@ -1,14 +1,26 @@
 package github.leavesczy.asm.plugins.privacySentry
 
-import github.leavesczy.asm.base.BaseTransform
-import github.leavesczy.asm.utils.Log
-import org.objectweb.asm.ClassReader
-import org.objectweb.asm.ClassWriter
+import com.android.build.api.instrumentation.AsmClassVisitorFactory
+import com.android.build.api.instrumentation.ClassContext
+import com.android.build.api.instrumentation.ClassData
+import com.android.build.api.instrumentation.InstrumentationParameters
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.Opcodes
-import org.objectweb.asm.tree.*
+import org.objectweb.asm.tree.AbstractInsnNode
+import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.FieldInsnNode
+import org.objectweb.asm.tree.InsnList
+import org.objectweb.asm.tree.InsnNode
+import org.objectweb.asm.tree.LdcInsnNode
+import org.objectweb.asm.tree.MethodInsnNode
+import org.objectweb.asm.tree.MethodNode
+import org.objectweb.asm.tree.TypeInsnNode
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import javax.swing.filechooser.FileSystemView
 
 /**
@@ -17,7 +29,34 @@ import javax.swing.filechooser.FileSystemView
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTransform() {
+interface PrivacySentryConfigParameters : InstrumentationParameters {
+    @get:Input
+    val config: Property<PrivacySentryConfig>
+}
+
+abstract class PrivacySentryClassVisitorFactory :
+    AsmClassVisitorFactory<PrivacySentryConfigParameters> {
+
+    override fun createClassVisitor(
+        classContext: ClassContext,
+        nextClassVisitor: ClassVisitor
+    ): ClassVisitor {
+        return PrivacySentryClassVisitor(
+            config = parameters.get().config.get(),
+            nextClassVisitor = nextClassVisitor
+        )
+    }
+
+    override fun isInstrumentable(classData: ClassData): Boolean {
+        return true
+    }
+
+}
+
+private class PrivacySentryClassVisitor(
+    private val config: PrivacySentryConfig,
+    private val nextClassVisitor: ClassVisitor
+) : ClassNode(Opcodes.ASM5) {
 
     companion object {
 
@@ -31,64 +70,67 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
 
     private var runtimeRecord: PrivacySentryRuntimeRecord? = null
 
-    override fun onTransformStart() {
+    override fun visit(
+        version: Int,
+        access: Int,
+        name: String?,
+        signature: String?,
+        superName: String?,
+        interfaces: Array<out String>?
+    ) {
+        super.visit(version, access, name, signature, superName, interfaces)
         runtimeRecord = PrivacySentryConfig.runtimeRecord
     }
 
-    override fun modifyClass(byteArray: ByteArray): ByteArray {
-        val classNode = ClassNode()
-        val classReader = ClassReader(byteArray)
-        classReader.accept(classNode, ClassReader.EXPAND_FRAMES)
-        val methods = classNode.methods
-        val mRuntimeRecord = runtimeRecord
-        if (!methods.isNullOrEmpty()) {
-            val taskList = mutableListOf<() -> Unit>()
-            val tempLintLog = StringBuilder()
-            for (methodNode in methods) {
-                val instructions = methodNode.instructions
-                val instructionIterator = instructions?.iterator()
-                if (instructionIterator != null) {
-                    while (instructionIterator.hasNext()) {
-                        val instruction = instructionIterator.next()
-                        if (instruction.isHookPoint()) {
-                            val lintLog = getLintLog(
-                                classNode,
-                                methodNode,
-                                instruction
-                            )
-                            tempLintLog.append(lintLog)
-                            tempLintLog.append("\n\n")
+    override fun visitEnd() {
+        super.visitEnd()
+        modifyClass()
+        if (allLintLog.isNotEmpty()) {
+            //输出检测结果到桌面
+//            FileUtils.write(generateLogFile(), allLintLog, Charset.defaultCharset())
+        }
+        accept(nextClassVisitor)
+    }
 
-                            if (mRuntimeRecord != null) {
-                                taskList.add {
-                                    insertRuntimeLog(
-                                        classNode,
-                                        methodNode,
-                                        instruction
-                                    )
-                                }
+    private fun modifyClass() {
+        val mRuntimeRecord = runtimeRecord
+        val taskList = mutableListOf<() -> Unit>()
+        val tempLintLog = StringBuilder()
+        methods.forEach { methodNode ->
+            val instructions = methodNode.instructions
+            val instructionIterator = instructions?.iterator()
+            if (instructionIterator != null) {
+                while (instructionIterator.hasNext()) {
+                    val instruction = instructionIterator.next()
+                    if (instruction.isHookPoint()) {
+                        val lintLog = getLintLog(
+                            methodNode,
+                            instruction
+                        )
+                        tempLintLog.append(lintLog)
+                        tempLintLog.append("\n\n")
+
+                        if (mRuntimeRecord != null) {
+                            taskList.add {
+                                insertRuntimeLog(
+                                    methodNode,
+                                    instruction
+                                )
                             }
-                            Log.log(
-                                "PrivacySentryTransform $lintLog"
-                            )
                         }
                     }
                 }
             }
-            if (tempLintLog.isNotBlank()) {
-                allLintLog.append(tempLintLog)
-            }
-            if (taskList.isNotEmpty() && mRuntimeRecord != null) {
-                taskList.forEach {
-                    it.invoke()
-                }
-                val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
-                classNode.accept(classWriter)
-                generateWriteToFileMethod(classWriter, mRuntimeRecord)
-                return classWriter.toByteArray()
-            }
         }
-        return byteArray
+        if (tempLintLog.isNotBlank()) {
+            allLintLog.append(tempLintLog)
+        }
+        if (taskList.isNotEmpty() && mRuntimeRecord != null) {
+            taskList.forEach {
+                it.invoke()
+            }
+            generateWriteToFileMethod(mRuntimeRecord)
+        }
     }
 
     private fun AbstractInsnNode.isHookPoint(): Boolean {
@@ -103,6 +145,7 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
                 }
                 return find != null
             }
+
             is FieldInsnNode -> {
                 val owner = this.owner
                 val desc = this.desc
@@ -117,11 +160,10 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
     }
 
     private fun getLintLog(
-        classNode: ClassNode,
         methodNode: MethodNode,
         hokeInstruction: AbstractInsnNode
     ): StringBuilder {
-        val classPath = classNode.name
+        val className = name
         val methodName = methodNode.name
         val methodDesc = methodNode.desc
         val owner: String
@@ -133,17 +175,19 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
                 desc = hokeInstruction.desc
                 name = hokeInstruction.name
             }
+
             is FieldInsnNode -> {
                 owner = hokeInstruction.owner
                 desc = hokeInstruction.desc
                 name = hokeInstruction.name
             }
+
             else -> {
                 throw RuntimeException("非法指令")
             }
         }
         val lintLog = StringBuilder()
-        lintLog.append(classPath)
+        lintLog.append(className)
         lintLog.append("  ->  ")
         lintLog.append(methodName)
         lintLog.append("  ->  ")
@@ -158,40 +202,34 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
     }
 
     private fun insertRuntimeLog(
-        classNode: ClassNode,
         methodNode: MethodNode,
         hokeInstruction: AbstractInsnNode
     ) {
         val insnList = InsnList()
-        insnList.apply {
-            val lintLog = getLintLog(classNode, methodNode, hokeInstruction)
-            lintLog.append("\n")
-            add(LdcInsnNode(lintLog.toString()))
-            add(TypeInsnNode(Opcodes.NEW, "java/lang/Throwable"))
-            add(InsnNode(Opcodes.DUP))
-            add(
-                MethodInsnNode(
-                    Opcodes.INVOKESPECIAL, "java/lang/Throwable",
-                    "<init>", "()V", false
-                )
+        val lintLog = getLintLog(methodNode, hokeInstruction)
+        lintLog.append("\n")
+        insnList.add(LdcInsnNode(lintLog.toString()))
+        insnList.add(TypeInsnNode(Opcodes.NEW, "java/lang/Throwable"))
+        insnList.add(InsnNode(Opcodes.DUP))
+        insnList.add(
+            MethodInsnNode(
+                Opcodes.INVOKESPECIAL, "java/lang/Throwable",
+                "<init>", "()V", false
             )
-            add(
-                MethodInsnNode(
-                    Opcodes.INVOKESTATIC,
-                    classNode.name,
-                    writeToFileMethodName,
-                    writeToFileMethodDesc
-                )
+        )
+        insnList.add(
+            MethodInsnNode(
+                Opcodes.INVOKESTATIC,
+                name,
+                writeToFileMethodName,
+                writeToFileMethodDesc
             )
-        }
+        )
         methodNode.instructions.insertBefore(hokeInstruction, insnList)
     }
 
-    private fun generateWriteToFileMethod(
-        classWriter: ClassWriter,
-        runtimeRecord: PrivacySentryRuntimeRecord
-    ) {
-        val methodVisitor = classWriter.visitMethod(
+    private fun generateWriteToFileMethod(runtimeRecord: PrivacySentryRuntimeRecord) {
+        val methodVisitor = visitMethod(
             Opcodes.ACC_PRIVATE or Opcodes.ACC_STATIC,
             writeToFileMethodName,
             writeToFileMethodDesc,
@@ -280,14 +318,6 @@ class PrivacySentryTransform(private val config: PrivacySentryConfig) : BaseTran
         methodVisitor.visitInsn(Opcodes.RETURN)
         methodVisitor.visitMaxs(4, 5)
         methodVisitor.visitEnd()
-    }
-
-    override fun onTransformEnd() {
-        if (allLintLog.isNotEmpty()) {
-            //取消注释后，将会在桌面输出检测结果
-//            FileUtils.write(generateLogFile(), allLintLog, Charset.defaultCharset())
-        }
-        runtimeRecord = null
     }
 
     private fun generateLogFile(): File {

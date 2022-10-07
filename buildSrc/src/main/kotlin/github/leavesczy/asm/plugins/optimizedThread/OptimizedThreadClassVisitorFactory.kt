@@ -1,13 +1,21 @@
 package github.leavesczy.asm.plugins.optimizedThread
 
-import github.leavesczy.asm.base.BaseTransform
+import com.android.build.api.instrumentation.AsmClassVisitorFactory
+import com.android.build.api.instrumentation.ClassContext
+import com.android.build.api.instrumentation.ClassData
+import com.android.build.api.instrumentation.InstrumentationParameters
 import github.leavesczy.asm.utils.insertArgument
 import github.leavesczy.asm.utils.nameWithDesc
 import github.leavesczy.asm.utils.simpleClassName
-import org.objectweb.asm.ClassReader
-import org.objectweb.asm.ClassWriter
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.Opcodes
-import org.objectweb.asm.tree.*
+import org.objectweb.asm.tree.ClassNode
+import org.objectweb.asm.tree.LdcInsnNode
+import org.objectweb.asm.tree.MethodInsnNode
+import org.objectweb.asm.tree.MethodNode
+import org.objectweb.asm.tree.TypeInsnNode
 
 /**
  * @Author: leavesCZY
@@ -15,7 +23,35 @@ import org.objectweb.asm.tree.*
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : BaseTransform() {
+interface OptimizedThreadConfigParameters : InstrumentationParameters {
+    @get:Input
+    val config: Property<OptimizedThreadConfig>
+}
+
+abstract class OptimizedThreadClassVisitorFactory :
+    AsmClassVisitorFactory<OptimizedThreadConfigParameters> {
+
+    override fun createClassVisitor(
+        classContext: ClassContext,
+        nextClassVisitor: ClassVisitor
+    ): ClassVisitor {
+        return OptimizedThreadClassVisitor(
+            config = parameters.get().config.get(),
+            nextClassVisitor = nextClassVisitor
+        )
+    }
+
+    override fun isInstrumentable(classData: ClassData): Boolean {
+        return true
+    }
+
+}
+
+private class OptimizedThreadClassVisitor(
+    private val config: OptimizedThreadConfig,
+    private val nextClassVisitor: ClassVisitor
+) :
+    ClassNode(Opcodes.ASM5) {
 
     companion object {
 
@@ -30,45 +66,33 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
 
     }
 
-    override fun modifyClass(byteArray: ByteArray): ByteArray {
-        val classNode = ClassNode()
-        val classReader = ClassReader(byteArray)
-        classReader.accept(classNode, ClassReader.EXPAND_FRAMES)
-        val methods = classNode.methods
-        if (!methods.isNullOrEmpty()) {
-            val taskList = mutableListOf<() -> Unit>()
-            for (methodNode in methods) {
-                val instructionIterator = methodNode.instructions?.iterator()
-                if (instructionIterator != null) {
-                    while (instructionIterator.hasNext()) {
-                        val instruction = instructionIterator.next()
-                        when (instruction.opcode) {
-                            Opcodes.INVOKESTATIC -> {
-                                val methodInsnNode = instruction as? MethodInsnNode
-                                if (methodInsnNode?.owner == executorsClass) {
-                                    taskList.add {
-                                        transformInvokeExecutorsInstruction(
-                                            classNode,
+    override fun visitEnd() {
+        super.visitEnd()
+        methods.forEach { methodNode ->
+            val instructions = methodNode.instructions
+            if (instructions != null && instructions.size() > 0) {
+                instructions.forEach { instruction ->
+                    when (instruction.opcode) {
+                        Opcodes.INVOKESTATIC -> {
+                            val methodInsnNode = instruction as? MethodInsnNode
+                            if (methodInsnNode?.owner == executorsClass) {
+                                transformInvokeExecutorsInstruction(
+                                    methodNode,
+                                    instruction
+                                )
+                            }
+                        }
+
+                        Opcodes.NEW -> {
+                            val typeInsnNode = instruction as? TypeInsnNode
+                            if (typeInsnNode != null) {
+                                if (typeInsnNode.desc == threadClass) {
+                                    //如果是在 ThreadFactory 内初始化线程，则不处理
+                                    if (!isThreadFactoryMethod(methodNode)) {
+                                        transformNewThreadInstruction(
                                             methodNode,
                                             instruction
                                         )
-                                    }
-                                }
-                            }
-                            Opcodes.NEW -> {
-                                val typeInsnNode = instruction as? TypeInsnNode
-                                if (typeInsnNode != null) {
-                                    if (typeInsnNode.desc == threadClass) {
-                                        //如果是在 ThreadFactory 内初始化线程，则不处理
-                                        if (!classNode.isThreadFactoryMethod(methodNode)) {
-                                            taskList.add {
-                                                transformNewThreadInstruction(
-                                                    classNode,
-                                                    methodNode,
-                                                    instruction
-                                                )
-                                            }
-                                        }
                                     }
                                 }
                             }
@@ -76,17 +100,11 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                     }
                 }
             }
-            taskList.forEach {
-                it.invoke()
-            }
         }
-        val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
-        classNode.accept(classWriter)
-        return classWriter.toByteArray()
+        accept(nextClassVisitor)
     }
 
     private fun transformInvokeExecutorsInstruction(
-        classNode: ClassNode,
         methodNode: MethodNode,
         methodInsnNode: MethodInsnNode
     ) {
@@ -96,16 +114,12 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
             methodInsnNode.owner = config.formatOptimizedThreadPoolClass
             //为调用 newFixedThreadPool 等方法的指令多插入一个 String 类型的方法入参参数声明
             methodInsnNode.insertArgument(String::class.java)
-            //将 ClassName 作为入参参数传给 newFixedThreadPool 等方法
-            methodNode.instructions.insertBefore(
-                methodInsnNode,
-                LdcInsnNode(classNode.simpleClassName)
-            )
+            //将 className 作为上述 String 参数的入参参数
+            methodNode.instructions.insertBefore(methodInsnNode, LdcInsnNode(simpleClassName))
         }
     }
 
     private fun transformNewThreadInstruction(
-        classNode: ClassNode,
         methodNode: MethodNode,
         typeInsnNode: TypeInsnNode
     ) {
@@ -121,7 +135,7 @@ class OptimizedThreadTransform(private val config: OptimizedThreadConfig) : Base
                 //为调用 Thread 构造函数的指令多插入一个 String 类型的方法入参参数声明
                 node.insertArgument(String::class.java)
                 //将 ClassName 作为构造参数传给 OptimizedThread
-                instructions.insertBefore(node, LdcInsnNode(classNode.simpleClassName))
+                instructions.insertBefore(node, LdcInsnNode(simpleClassName))
                 break
             }
         }

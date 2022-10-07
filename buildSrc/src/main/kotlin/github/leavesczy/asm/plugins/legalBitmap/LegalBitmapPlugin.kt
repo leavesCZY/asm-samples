@@ -1,9 +1,10 @@
 package github.leavesczy.asm.plugins.legalBitmap
 
-import com.android.build.gradle.AppExtension
+import com.android.build.api.instrumentation.FramesComputationMode
+import com.android.build.api.instrumentation.InstrumentationScope
+import com.android.build.api.variant.AndroidComponentsExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
 
 /**
  * @Author: leavesCZY
@@ -12,9 +13,18 @@ import org.gradle.kotlin.dsl.getByType
 class LegalBitmapPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val config = LegalBitmapConfig()
-        val appExtension: AppExtension = project.extensions.getByType()
-        appExtension.registerTransform(LegalBitmapTransform(config))
+        val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
+        androidComponents.onVariants { variant ->
+            variant.instrumentation.transformClassesWith(
+                LegalBitmapClassVisitorFactory::class.java,
+                InstrumentationScope.ALL
+            ) { params ->
+                params.config.set(LegalBitmapConfig())
+            }
+            variant.instrumentation.setAsmFramesComputationMode(
+                FramesComputationMode.COMPUTE_FRAMES_FOR_INSTRUMENTED_METHODS
+            )
+        }
     }
 
 }
