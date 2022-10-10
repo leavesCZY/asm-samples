@@ -8,13 +8,14 @@ import java.io.Serializable
  * @Desc:
  */
 data class DoubleClickConfig(
-    private val doubleCheckClass: String = "github.leavesczy.asm.doubleClick.ViewDoubleClickCheck",
+    private val doubleCheckClass: String = "github.leavesczy.asm.doubleClick.view.ViewDoubleClickCheck",
     val doubleCheckMethodName: String = "canClick",
-    val doubleCheckMethodDescriptor: String = "(Landroid/view/View;)Z",
     private val checkViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.CheckViewOnClick",
     private val uncheckViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.UncheckViewOnClick",
     val hookPointList: List<DoubleClickHookPoint> = extraHookPoints
 ) : Serializable {
+
+    val doubleCheckMethodDescriptor = "(Landroid/view/View;)Z"
 
     val formatDoubleCheckClass: String
         get() = doubleCheckClass.replace(".", "/")
@@ -43,14 +44,14 @@ private val extraHookPoints = listOf(
         methodName = "onClick",
         nameWithDesc = "onClick(Landroid/view/View;)V"
     ),
-    DoubleClickHookPoint(
-        interfaceName = "com/chad/library/adapter/base/listener/OnItemClickListener",
-        methodName = "onItemClick",
-        nameWithDesc = "onItemClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V"
-    ),
-    DoubleClickHookPoint(
-        interfaceName = "com/chad/library/adapter/base/listener/OnItemChildClickListener",
-        methodName = "onItemChildClick",
-        nameWithDesc = "onItemChildClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V",
-    )
+//    DoubleClickHookPoint(
+//        interfaceName = "com/chad/library/adapter/base/listener/OnItemClickListener",
+//        methodName = "onItemClick",
+//        nameWithDesc = "onItemClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V"
+//    ),
+//    DoubleClickHookPoint(
+//        interfaceName = "com/chad/library/adapter/base/listener/OnItemChildClickListener",
+//        methodName = "onItemChildClick",
+//        nameWithDesc = "onItemChildClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V",
+//    )
 )

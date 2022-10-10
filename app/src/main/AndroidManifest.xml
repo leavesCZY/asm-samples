@@ -18,7 +18,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".doubleClick.ViewDoubleClickCheckActivity"
+            android:name=".doubleClick.view.ViewDoubleClickCheckActivity"
+            android:exported="false" />
+        <activity
+            android:name=".doubleClick.compose.ComposeDoubleClickCheckActivity"
             android:exported="false" />
         <activity
             android:name=".optimizedThread.OptimizedThreadActivity"

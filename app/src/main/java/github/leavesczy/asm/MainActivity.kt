@@ -4,7 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import github.leavesczy.asm.doubleClick.ViewDoubleClickCheckActivity
+import github.leavesczy.asm.doubleClick.compose.ComposeDoubleClickCheckActivity
+import github.leavesczy.asm.doubleClick.view.ViewDoubleClickCheckActivity
 import github.leavesczy.asm.legalBitmap.LegalBitmapActivity
 import github.leavesczy.asm.optimizedThread.OptimizedThreadActivity
 import github.leavesczy.asm.privacySentry.PrivacySentryActivity
@@ -22,6 +23,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         findViewById<TextView>(R.id.tvViewDoubleClickCheck).setOnClickListener {
             startActivity(Intent(this, ViewDoubleClickCheckActivity::class.java))
+        }
+        findViewById<TextView>(R.id.tvComposeDoubleClickCheck).setOnClickListener {
+            startActivity(Intent(this, ComposeDoubleClickCheckActivity::class.java))
         }
         findViewById<TextView>(R.id.tvOptimizedThread).setOnClickListener {
             startActivity(Intent(this, OptimizedThreadActivity::class.java))

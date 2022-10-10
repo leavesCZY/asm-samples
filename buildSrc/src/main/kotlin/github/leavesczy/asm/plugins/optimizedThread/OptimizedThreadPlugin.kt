@@ -18,7 +18,7 @@ class OptimizedThreadPlugin : Plugin<Project> {
         androidComponents.onVariants { variant ->
             variant.instrumentation.transformClassesWith(
                 OptimizedThreadClassVisitorFactory::class.java,
-                InstrumentationScope.ALL
+                InstrumentationScope.PROJECT
             ) { params ->
                 params.config.set(OptimizedThreadConfig())
             }

@@ -1,4 +1,4 @@
-package github.leavesczy.asm.doubleClick
+package github.leavesczy.asm.doubleClick.view
 
 import android.graphics.Color
 import androidx.cardview.widget.CardView

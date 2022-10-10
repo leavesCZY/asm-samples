@@ -40,6 +40,7 @@ class OptimizedThreadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_optimized_thread)
+        title = "线程整治"
         btnSubmitTask.setOnClickListener {
             newFixedThreadPool.execute {
                 printThreadName("newFixedThreadPool")

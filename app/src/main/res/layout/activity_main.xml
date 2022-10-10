@@ -9,7 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="双击防抖" />
+        android:text="View 双击防抖"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/tvComposeDoubleClickCheck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Jetpack Compose 双击防抖"
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/tvOptimizedThread"

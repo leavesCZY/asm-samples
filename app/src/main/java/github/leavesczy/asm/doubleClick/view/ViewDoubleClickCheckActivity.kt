@@ -1,4 +1,4 @@
-package github.leavesczy.asm.doubleClick
+package github.leavesczy.asm.doubleClick.view
 
 import android.os.Bundle
 import android.view.View
@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemChildClickListener
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import github.leavesczy.asm.R
+import github.leavesczy.asm.doubleClick.UncheckViewOnClick
 
 /**
  * @Author: leavesCZY
@@ -25,6 +26,7 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_double_click_check)
+        title = "View 双击防抖"
         findViewById<TextView>(R.id.tvObjectUnCheck).setOnClickListener(object :
             View.OnClickListener {
             @UncheckViewOnClick
@@ -41,7 +43,6 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvLambda).setOnClickListener {
             onClickView()
         }
-
         val clickDemoAdapter = ClickDemoAdapter()
         clickDemoAdapter.addChildClickViewIds(R.id.viewChild)
         clickDemoAdapter.setOnItemClickListener(object : OnItemClickListener {
@@ -65,7 +66,7 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
         rvList.layoutManager = LinearLayoutManager(this)
     }
 
-    @CheckViewOnClick
+    //    @CheckViewOnClick
     fun onClickByXml(view: View) {
         onClickView()
     }

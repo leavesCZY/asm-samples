@@ -30,6 +30,7 @@ class PrivacySentryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_privacy_sentry)
+        title = "隐私合规"
         showLog("可以通过 adb 命令导出运行时记录的文件到当前工程目录下：\n adb pull ${PrivacySentryRecord.logFile.absolutePath} ")
         btnGetDeviceId.setOnClickListener {
             showLog("deviceId: " + DeviceUtils.getDeviceId(this))

@@ -4,6 +4,7 @@ import com.android.build.api.instrumentation.AsmClassVisitorFactory
 import com.android.build.api.instrumentation.ClassContext
 import com.android.build.api.instrumentation.ClassData
 import com.android.build.api.instrumentation.InstrumentationParameters
+import github.leavesczy.asm.utils.LogPrint
 import github.leavesczy.asm.utils.filterLambda
 import github.leavesczy.asm.utils.hasAnnotation
 import github.leavesczy.asm.utils.isStatic
@@ -74,6 +75,11 @@ private class DoubleClickClassVisitor(
         super.visitEnd()
         val shouldHookMethodList = mutableSetOf<MethodNode>()
         methods.forEach { methodNode ->
+            val name = methodNode.name
+            val desc = methodNode.desc
+            if (name.contains("clickable") || desc.contains("clickable")) {
+                LogPrint.log("class  ${classData.className} \n name: $name \n desc: $desc  \n\n")
+            }
             when {
                 methodNode.isStatic -> {
                     //不处理静态方法

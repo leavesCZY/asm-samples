@@ -18,7 +18,7 @@ class DoubleClickPlugin : Plugin<Project> {
         androidComponents.onVariants { variant ->
             variant.instrumentation.transformClassesWith(
                 DoubleClickClassVisitorFactory::class.java,
-                InstrumentationScope.PROJECT
+                InstrumentationScope.ALL
             ) { params ->
                 params.config.set(DoubleClickConfig())
             }
