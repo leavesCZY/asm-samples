@@ -2,11 +2,12 @@
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
 }
 
 apply {
-    plugin<github.leavesczy.asm.plugins.doubleClick.DoubleClickPlugin>()
+    plugin<github.leavesczy.asm.plugins.doubleClick.view.ViewDoubleClickPlugin>()
+    plugin<github.leavesczy.asm.plugins.doubleClick.compose.ComposeDoubleClickPlugin>()
     plugin<github.leavesczy.asm.plugins.legalBitmap.LegalBitmapPlugin>()
     plugin<github.leavesczy.asm.plugins.optimizedThread.OptimizedThreadPlugin>()
     plugin<github.leavesczy.asm.plugins.privacySentry.PrivacySentryPlugin>()

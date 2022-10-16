@@ -1,4 +1,4 @@
-package github.leavesczy.asm.plugins.doubleClick
+package github.leavesczy.asm.plugins.doubleClick.view
 
 import java.io.Serializable
 
@@ -7,12 +7,12 @@ import java.io.Serializable
  * @Date: 2021/12/4 16:04
  * @Desc:
  */
-data class DoubleClickConfig(
+data class ViewDoubleClickConfig(
     private val doubleCheckClass: String = "github.leavesczy.asm.doubleClick.view.ViewDoubleClickCheck",
     val doubleCheckMethodName: String = "canClick",
     private val checkViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.CheckViewOnClick",
     private val uncheckViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.UncheckViewOnClick",
-    val hookPointList: List<DoubleClickHookPoint> = extraHookPoints
+    val hookPointList: List<ViewDoubleClickHookPoint> = extraHookPoints
 ) : Serializable {
 
     val doubleCheckMethodDescriptor = "(Landroid/view/View;)Z"
@@ -28,7 +28,7 @@ data class DoubleClickConfig(
 
 }
 
-data class DoubleClickHookPoint(
+data class ViewDoubleClickHookPoint(
     val interfaceName: String,
     val methodName: String,
     val nameWithDesc: String,
@@ -39,7 +39,7 @@ data class DoubleClickHookPoint(
 }
 
 private val extraHookPoints = listOf(
-    DoubleClickHookPoint(
+    ViewDoubleClickHookPoint(
         interfaceName = "android/view/View\$OnClickListener",
         methodName = "onClick",
         nameWithDesc = "onClick(Landroid/view/View;)V"

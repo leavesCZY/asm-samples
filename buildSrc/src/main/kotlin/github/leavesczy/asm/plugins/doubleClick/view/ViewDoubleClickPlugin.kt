@@ -1,4 +1,4 @@
-package github.leavesczy.asm.plugins.doubleClick
+package github.leavesczy.asm.plugins.doubleClick.view
 
 import com.android.build.api.instrumentation.FramesComputationMode
 import com.android.build.api.instrumentation.InstrumentationScope
@@ -11,16 +11,16 @@ import org.gradle.api.Project
  * @Date: 2021/12/2 16:02
  * @Desc:
  */
-class DoubleClickPlugin : Plugin<Project> {
+class ViewDoubleClickPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         val androidComponents = project.extensions.getByType(AndroidComponentsExtension::class.java)
         androidComponents.onVariants { variant ->
             variant.instrumentation.transformClassesWith(
-                DoubleClickClassVisitorFactory::class.java,
+                ViewDoubleClickClassVisitorFactory::class.java,
                 InstrumentationScope.ALL
             ) { params ->
-                params.config.set(DoubleClickConfig())
+                params.config.set(ViewDoubleClickConfig())
             }
             variant.instrumentation.setAsmFramesComputationMode(
                 FramesComputationMode.COMPUTE_FRAMES_FOR_INSTRUMENTED_METHODS

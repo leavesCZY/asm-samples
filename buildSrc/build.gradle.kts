@@ -17,7 +17,7 @@ sourceSets {
 }
 
 dependencies {
-    val agpVersion = "7.2.2"
+    val agpVersion = "7.3.1"
     val kotlinVersion = "1.7.20"
     implementation("com.android.tools.build:gradle:${agpVersion}")
     implementation("com.android.tools.build:gradle-api:${agpVersion}")

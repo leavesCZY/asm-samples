@@ -1,10 +1,9 @@
-package github.leavesczy.asm.plugins.doubleClick
+package github.leavesczy.asm.plugins.doubleClick.view
 
 import com.android.build.api.instrumentation.AsmClassVisitorFactory
 import com.android.build.api.instrumentation.ClassContext
 import com.android.build.api.instrumentation.ClassData
 import com.android.build.api.instrumentation.InstrumentationParameters
-import github.leavesczy.asm.utils.LogPrint
 import github.leavesczy.asm.utils.filterLambda
 import github.leavesczy.asm.utils.hasAnnotation
 import github.leavesczy.asm.utils.isStatic
@@ -15,36 +14,28 @@ import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.Handle
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
-import org.objectweb.asm.tree.ClassNode
-import org.objectweb.asm.tree.InsnList
-import org.objectweb.asm.tree.InsnNode
-import org.objectweb.asm.tree.JumpInsnNode
-import org.objectweb.asm.tree.LabelNode
-import org.objectweb.asm.tree.MethodInsnNode
-import org.objectweb.asm.tree.MethodNode
-import org.objectweb.asm.tree.VarInsnNode
+import org.objectweb.asm.tree.*
 
 /**
  * @Author: CZY
  * @Date: 2022/9/24 15:07
  * @Desc:
  */
-interface DoubleClickConfigParameters : InstrumentationParameters {
+interface ViewDoubleClickConfigParameters : InstrumentationParameters {
     @get:Input
-    val config: Property<DoubleClickConfig>
+    val config: Property<ViewDoubleClickConfig>
 }
 
-abstract class DoubleClickClassVisitorFactory :
-    AsmClassVisitorFactory<DoubleClickConfigParameters> {
+abstract class ViewDoubleClickClassVisitorFactory :
+    AsmClassVisitorFactory<ViewDoubleClickConfigParameters> {
 
     override fun createClassVisitor(
         classContext: ClassContext,
         nextClassVisitor: ClassVisitor
     ): ClassVisitor {
-        return DoubleClickClassVisitor(
-            config = parameters.get().config.get(),
-            classData = classContext.currentClassData,
-            nextClassVisitor = nextClassVisitor
+        return ViewDoubleClickClassVisitor(
+            nextClassVisitor = nextClassVisitor,
+            config = parameters.get().config.get()
         )
     }
 
@@ -54,18 +45,15 @@ abstract class DoubleClickClassVisitorFactory :
 
 }
 
-private class DoubleClickClassVisitor(
-    private val config: DoubleClickConfig,
-    private val classData: ClassData,
-    private val nextClassVisitor: ClassVisitor
+private class ViewDoubleClickClassVisitor(
+    private val nextClassVisitor: ClassVisitor,
+    private val config: ViewDoubleClickConfig,
 ) :
     ClassNode(Opcodes.ASM5) {
 
     private companion object {
 
         private const val ViewDescriptor = "Landroid/view/View;"
-
-        private const val OnClickViewMethodDescriptor = "(Landroid/view/View;)V"
 
         private const val ButterKnifeOnClickAnnotationDesc = "Lbutterknife/OnClick;"
 
@@ -75,11 +63,6 @@ private class DoubleClickClassVisitor(
         super.visitEnd()
         val shouldHookMethodList = mutableSetOf<MethodNode>()
         methods.forEach { methodNode ->
-            val name = methodNode.name
-            val desc = methodNode.desc
-            if (name.contains("clickable") || desc.contains("clickable")) {
-                LogPrint.log("class  ${classData.className} \n name: $name \n desc: $desc  \n\n")
-            }
             when {
                 methodNode.isStatic -> {
                     //不处理静态方法
