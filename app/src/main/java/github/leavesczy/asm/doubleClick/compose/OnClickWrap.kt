@@ -8,7 +8,7 @@ import android.util.Log
  * @Desc:
  * @Github：https://github.com/leavesCZY
  */
-class ClickableWrap(private val onClick: (() -> Unit)) : Function0<Unit> {
+class OnClickWrap(private val onClick: (() -> Unit)) : Function0<Unit> {
 
     companion object {
 
@@ -19,12 +19,18 @@ class ClickableWrap(private val onClick: (() -> Unit)) : Function0<Unit> {
     }
 
     override fun invoke() {
-        Log.e("ClickableWrap", "invoke")
         val currentTime = System.currentTimeMillis()
         if (lastClickTime == 0L || currentTime - lastClickTime > MIN_DURATION) {
             lastClickTime = currentTime
             onClick()
+            log("onClick isEnabled : true")
+        } else {
+            log("onClick isEnabled : false")
         }
+    }
+
+    private fun log(log: String) {
+        Log.e("ViewDoubleClickCheck", log)
     }
 
 }

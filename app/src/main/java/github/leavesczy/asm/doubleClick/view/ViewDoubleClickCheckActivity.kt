@@ -43,14 +43,14 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvLambda).setOnClickListener {
             onClickView()
         }
-        val clickDemoAdapter = ClickDemoAdapter()
-        clickDemoAdapter.addChildClickViewIds(R.id.viewChild)
-        clickDemoAdapter.setOnItemClickListener(object : OnItemClickListener {
+        val viewDoubleClickAdapter = ViewDoubleClickAdapter()
+        viewDoubleClickAdapter.addChildClickViewIds(R.id.viewChild)
+        viewDoubleClickAdapter.setOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
                 onClickView()
             }
         })
-        clickDemoAdapter.setOnItemChildClickListener(object : OnItemChildClickListener {
+        viewDoubleClickAdapter.setOnItemChildClickListener(object : OnItemChildClickListener {
             override fun onItemChildClick(
                 adapter: BaseQuickAdapter<*, *>,
                 view: View,
@@ -62,11 +62,11 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
             }
         })
         val rvList = findViewById<RecyclerView>(R.id.rvList)
-        rvList.adapter = clickDemoAdapter
+        rvList.adapter = viewDoubleClickAdapter
         rvList.layoutManager = LinearLayoutManager(this)
     }
 
-    //    @CheckViewOnClick
+    //@CheckViewOnClick
     fun onClickByXml(view: View) {
         onClickView()
     }

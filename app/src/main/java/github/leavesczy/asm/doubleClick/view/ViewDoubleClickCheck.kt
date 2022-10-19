@@ -14,23 +14,24 @@ object ViewDoubleClickCheck {
 
     private var lastClickTime = 0L
 
-    private var clickIndex = 1
+    private var clickIndex = 0
 
     @JvmStatic
-    fun canClick(view: View): Boolean {
-        log("canClick " + view + " " + clickIndex++)
+    fun onClick(view: View): Boolean {
+        clickIndex++
+        log("onClick $clickIndex")
         val currentTime = System.currentTimeMillis()
         if (lastClickTime == 0L || currentTime - lastClickTime > MIN_DURATION) {
             lastClickTime = currentTime
-            log("canClick yes")
+            log("onClick isEnabled : true")
             return true
         }
-        log("canClick no:  " + (currentTime - lastClickTime))
+        log("onClick isEnabled : false")
         return false
     }
 
     private fun log(log: String) {
-        Log.e("DoubleClick", log)
+        Log.e("ViewDoubleClickCheck", log)
     }
 
 }

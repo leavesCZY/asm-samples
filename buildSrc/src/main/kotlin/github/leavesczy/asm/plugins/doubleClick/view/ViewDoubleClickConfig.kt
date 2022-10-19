@@ -8,17 +8,17 @@ import java.io.Serializable
  * @Desc:
  */
 data class ViewDoubleClickConfig(
-    private val doubleCheckClass: String = "github.leavesczy.asm.doubleClick.view.ViewDoubleClickCheck",
-    val doubleCheckMethodName: String = "canClick",
+    private val doubleClickCheckClass: String = "github.leavesczy.asm.doubleClick.view.ViewDoubleClickCheck",
+    val onClickMethodName: String = "onClick",
     private val checkViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.CheckViewOnClick",
     private val uncheckViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.UncheckViewOnClick",
     val hookPointList: List<ViewDoubleClickHookPoint> = extraHookPoints
 ) : Serializable {
 
-    val doubleCheckMethodDescriptor = "(Landroid/view/View;)Z"
+    val onClickMethodDesc = "(Landroid/view/View;)Z"
 
-    val formatDoubleCheckClass: String
-        get() = doubleCheckClass.replace(".", "/")
+    val formatDoubleClickCheckClass: String
+        get() = doubleClickCheckClass.replace(".", "/")
 
     val formatCheckViewOnClickAnnotation: String
         get() = "L" + checkViewOnClickAnnotation.replace(".", "/") + ";"

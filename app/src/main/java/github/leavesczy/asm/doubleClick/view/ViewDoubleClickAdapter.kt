@@ -11,7 +11,7 @@ import github.leavesczy.asm.R
  * @Date: 2021/12/8 22:33
  * @Desc:
  */
-class ClickDemoAdapter(dataList: MutableList<Int>) :
+class ViewDoubleClickAdapter(dataList: MutableList<Int>) :
     BaseQuickAdapter<Int, BaseViewHolder>(R.layout.item_card, dataList) {
 
     companion object {
@@ -21,12 +21,12 @@ class ClickDemoAdapter(dataList: MutableList<Int>) :
             "#FF03DAC5",
         )
 
-        operator fun invoke(): ClickDemoAdapter {
+        operator fun invoke(): ViewDoubleClickAdapter {
             val dataList = mutableListOf<Int>()
             randomColors.forEach {
                 dataList.add(Color.parseColor(it))
             }
-            return ClickDemoAdapter(dataList)
+            return ViewDoubleClickAdapter(dataList)
         }
 
     }

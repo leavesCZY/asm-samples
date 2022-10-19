@@ -13,7 +13,7 @@ object LogPrint {
 
     fun log(log: Any?) {
         logThreadExecutor.submit {
-            println("ASM: $log")
+            println(log)
         }
     }
 

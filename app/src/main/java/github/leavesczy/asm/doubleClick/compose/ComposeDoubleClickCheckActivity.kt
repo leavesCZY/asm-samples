@@ -3,7 +3,6 @@ package github.leavesczy.asm.doubleClick.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
@@ -28,7 +27,8 @@ import github.leavesczy.asm.doubleClick.compose.theme.TransformTheme
  */
 class ComposeDoubleClickCheckActivity : ComponentActivity() {
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+    private val whiteListTag = "noCheck"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -41,7 +41,7 @@ class ComposeDoubleClickCheckActivity : ComponentActivity() {
                             title = {
                                 Text(
                                     text = "Jetpack Compose 双击防抖",
-                                    fontSize = 20.sp,
+                                    fontSize = 19.sp,
                                     color = Color.White
                                 )
                             },
@@ -69,7 +69,8 @@ class ComposeDoubleClickCheckActivity : ComponentActivity() {
                             Text(
                                 modifier = Modifier
                                     .padding(all = 40.dp),
-                                text = "index: $index"
+                                text = "index: $index",
+                                fontSize = 22.sp
                             )
                             Text(
                                 modifier = Modifier
@@ -77,7 +78,15 @@ class ComposeDoubleClickCheckActivity : ComponentActivity() {
                                         index++
                                     }
                                     .padding(all = 20.dp),
-                                text = "Text clickable"
+                                text = "Text clickable 防抖"
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .clickable(onClickLabel = whiteListTag) {
+                                        index++
+                                    }
+                                    .padding(all = 20.dp),
+                                text = "Text clickable 不防抖"
                             )
                             Text(
                                 modifier = Modifier
@@ -87,14 +96,25 @@ class ComposeDoubleClickCheckActivity : ComponentActivity() {
                                         }
                                     )
                                     .padding(all = 20.dp),
-                                text = "Text combinedClickable"
+                                text = "Text combinedClickable 防抖"
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .combinedClickable(
+                                        onClickLabel = whiteListTag,
+                                        onClick = {
+                                            index++
+                                        }
+                                    )
+                                    .padding(all = 20.dp),
+                                text = "Text combinedClickable 不防抖"
                             )
                             Button(onClick = {
                                 index++
                             }) {
                                 Text(
                                     modifier = Modifier,
-                                    text = "Button"
+                                    text = "Button 防抖"
                                 )
                             }
                             TextButton(onClick = {
@@ -103,7 +123,7 @@ class ComposeDoubleClickCheckActivity : ComponentActivity() {
                                 Text(
                                     modifier = Modifier
                                         .padding(all = 20.dp),
-                                    text = "TextButton"
+                                    text = "TextButton 防抖"
                                 )
                             }
                         }

@@ -20,7 +20,12 @@ class ComposeDoubleClickPlugin : Plugin<Project> {
                 ComposeDoubleClickClassVisitorFactory::class.java,
                 InstrumentationScope.ALL
             ) { params ->
-                params.config.set(ComposeDoubleClickConfig(clickableWrapClass = "github.leavesczy.asm.doubleClick.compose.ClickableWrap"))
+                params.config.set(
+                    ComposeDoubleClickConfig(
+                        onOnClickWrapClass = "github.leavesczy.asm.doubleClick.compose.OnClickWrap",
+                        whiteListTag = "noCheck"
+                    )
+                )
             }
             variant.instrumentation.setAsmFramesComputationMode(
                 FramesComputationMode.COMPUTE_FRAMES_FOR_INSTRUMENTED_METHODS

@@ -133,9 +133,9 @@ private class ViewDoubleClickClassVisitor(
                 list.add(
                     MethodInsnNode(
                         Opcodes.INVOKESTATIC,
-                        config.formatDoubleCheckClass,
-                        config.doubleCheckMethodName,
-                        config.doubleCheckMethodDescriptor
+                        config.formatDoubleClickCheckClass,
+                        config.onClickMethodName,
+                        config.onClickMethodDesc
                     )
                 )
                 val labelNode = LabelNode()
