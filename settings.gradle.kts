@@ -20,4 +20,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "ASM_Transform"
 include(":app")
-include(":doubleClick")

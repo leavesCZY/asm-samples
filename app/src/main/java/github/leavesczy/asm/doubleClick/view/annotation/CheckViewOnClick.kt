@@ -1,4 +1,4 @@
-package github.leavesczy.asm.doubleClick
+package github.leavesczy.asm.doubleClick.view.annotation
 
 /**
  * @Author: leavesCZY

@@ -128,7 +128,7 @@ private class OptimizedThreadClassVisitor(
         //从 typeInsnNode 指令开始遍历，找到调用 Thread 构造函数的指令，然后对其进行替换
         for (index in typeInsnNodeIndex + 1 until instructions.size()) {
             val node = instructions[index]
-            if (node is MethodInsnNode && node.isThreadInitMethodInsn()) {
+            if (node is MethodInsnNode && node.isThreadInitMethod()) {
                 //将 Thread 替换为 OptimizedThread
                 typeInsnNode.desc = config.formatOptimizedThreadClass
                 node.owner = config.formatOptimizedThreadClass
@@ -141,7 +141,7 @@ private class OptimizedThreadClassVisitor(
         }
     }
 
-    private fun MethodInsnNode.isThreadInitMethodInsn(): Boolean {
+    private fun MethodInsnNode.isThreadInitMethod(): Boolean {
         return this.owner == threadClass && this.name == "<init>"
     }
 

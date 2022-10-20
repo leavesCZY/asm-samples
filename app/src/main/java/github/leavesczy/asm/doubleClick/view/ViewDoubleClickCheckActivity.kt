@@ -10,7 +10,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemChildClickListener
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import github.leavesczy.asm.R
-import github.leavesczy.asm.doubleClick.UncheckViewOnClick
+import github.leavesczy.asm.doubleClick.view.annotation.CheckViewOnClick
+import github.leavesczy.asm.doubleClick.view.annotation.UncheckViewOnClick
 
 /**
  * @Author: leavesCZY
@@ -66,7 +67,7 @@ class ViewDoubleClickCheckActivity : AppCompatActivity() {
         rvList.layoutManager = LinearLayoutManager(this)
     }
 
-    //@CheckViewOnClick
+    @CheckViewOnClick
     fun onClickByXml(view: View) {
         onClickView()
     }

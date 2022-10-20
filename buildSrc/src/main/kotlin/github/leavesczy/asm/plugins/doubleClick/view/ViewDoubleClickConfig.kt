@@ -10,8 +10,8 @@ import java.io.Serializable
 data class ViewDoubleClickConfig(
     private val doubleClickCheckClass: String = "github.leavesczy.asm.doubleClick.view.ViewDoubleClickCheck",
     val onClickMethodName: String = "onClick",
-    private val checkViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.CheckViewOnClick",
-    private val uncheckViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.UncheckViewOnClick",
+    private val checkViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.view.annotation.CheckViewOnClick",
+    private val uncheckViewOnClickAnnotation: String = "github.leavesczy.asm.doubleClick.view.annotation.UncheckViewOnClick",
     val hookPointList: List<ViewDoubleClickHookPoint> = extraHookPoints
 ) : Serializable {
 
@@ -44,14 +44,14 @@ private val extraHookPoints = listOf(
         methodName = "onClick",
         nameWithDesc = "onClick(Landroid/view/View;)V"
     ),
-//    DoubleClickHookPoint(
-//        interfaceName = "com/chad/library/adapter/base/listener/OnItemClickListener",
-//        methodName = "onItemClick",
-//        nameWithDesc = "onItemClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V"
-//    ),
-//    DoubleClickHookPoint(
-//        interfaceName = "com/chad/library/adapter/base/listener/OnItemChildClickListener",
-//        methodName = "onItemChildClick",
-//        nameWithDesc = "onItemChildClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V",
-//    )
+    ViewDoubleClickHookPoint(
+        interfaceName = "com/chad/library/adapter/base/listener/OnItemClickListener",
+        methodName = "onItemClick",
+        nameWithDesc = "onItemClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V"
+    ),
+    ViewDoubleClickHookPoint(
+        interfaceName = "com/chad/library/adapter/base/listener/OnItemChildClickListener",
+        methodName = "onItemChildClick",
+        nameWithDesc = "onItemChildClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V",
+    )
 )

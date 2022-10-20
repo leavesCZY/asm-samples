@@ -18,7 +18,7 @@ class ViewDoubleClickPlugin : Plugin<Project> {
         androidComponents.onVariants { variant ->
             variant.instrumentation.transformClassesWith(
                 ViewDoubleClickClassVisitorFactory::class.java,
-                InstrumentationScope.ALL
+                InstrumentationScope.PROJECT
             ) { params ->
                 params.config.set(ViewDoubleClickConfig())
             }
