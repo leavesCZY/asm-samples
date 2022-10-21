@@ -21,7 +21,7 @@ object ViewDoubleClickCheck {
         clickIndex++
         log("onClick $clickIndex")
         val currentTime = System.currentTimeMillis()
-        if (lastClickTime == 0L || currentTime - lastClickTime > MIN_DURATION) {
+        if (currentTime - lastClickTime > MIN_DURATION) {
             lastClickTime = currentTime
             log("onClick isEnabled : true")
             return true

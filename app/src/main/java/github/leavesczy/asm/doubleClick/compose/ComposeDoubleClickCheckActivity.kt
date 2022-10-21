@@ -27,7 +27,11 @@ import github.leavesczy.asm.doubleClick.compose.theme.TransformTheme
  */
 class ComposeDoubleClickCheckActivity : ComponentActivity() {
 
-    private val whiteListTag = "noCheck"
+    companion object {
+
+        const val whiteListTag = "noCheck"
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,35 +72,17 @@ class ComposeDoubleClickCheckActivity : ComponentActivity() {
                         ) {
                             Text(
                                 modifier = Modifier
-                                    .padding(all = 40.dp),
+                                    .padding(all = 10.dp),
                                 text = "index: $index",
                                 fontSize = 22.sp
-                            )
-                            Text(
-                                modifier = Modifier
-                                    .clickable {
-                                        index++
-                                    }
-                                    .padding(all = 20.dp),
-                                text = "Text clickable 防抖"
                             )
                             Text(
                                 modifier = Modifier
                                     .clickable(onClickLabel = whiteListTag) {
                                         index++
                                     }
-                                    .padding(all = 20.dp),
+                                    .padding(all = 15.dp),
                                 text = "Text clickable 不防抖"
-                            )
-                            Text(
-                                modifier = Modifier
-                                    .combinedClickable(
-                                        onClick = {
-                                            index++
-                                        }
-                                    )
-                                    .padding(all = 20.dp),
-                                text = "Text combinedClickable 防抖"
                             )
                             Text(
                                 modifier = Modifier
@@ -106,15 +92,33 @@ class ComposeDoubleClickCheckActivity : ComponentActivity() {
                                             index++
                                         }
                                     )
-                                    .padding(all = 20.dp),
+                                    .padding(all = 15.dp),
                                 text = "Text combinedClickable 不防抖"
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .clickable {
+                                        index++
+                                    }
+                                    .padding(all = 15.dp),
+                                text = "Text clickable ASM 防抖"
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .combinedClickable(
+                                        onClick = {
+                                            index++
+                                        }
+                                    )
+                                    .padding(all = 15.dp),
+                                text = "Text combinedClickable ASM 防抖"
                             )
                             Button(onClick = {
                                 index++
                             }) {
                                 Text(
                                     modifier = Modifier,
-                                    text = "Button 防抖"
+                                    text = "Button ASM 防抖"
                                 )
                             }
                             TextButton(onClick = {
@@ -122,10 +126,28 @@ class ComposeDoubleClickCheckActivity : ComponentActivity() {
                             }) {
                                 Text(
                                     modifier = Modifier
-                                        .padding(all = 20.dp),
-                                    text = "TextButton 防抖"
+                                        .padding(all = 15.dp),
+                                    text = "TextButton ASM 防抖"
                                 )
                             }
+                            Text(
+                                modifier = Modifier
+                                    .clickableCheck {
+                                        index++
+                                    }
+                                    .padding(all = 15.dp),
+                                text = "Text clickable 自定义防抖"
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .combinedClickableCheck(
+                                        onClick = {
+                                            index++
+                                        }
+                                    )
+                                    .padding(all = 15.dp),
+                                text = "Text combinedClickable 自定义防抖"
+                            )
                         }
                     }
                 }

@@ -8,7 +8,8 @@
         android:id="@+id/tvViewDoubleClickCheck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         android:text="View 双击防抖"
         android:textAllCaps="false" />
 
@@ -16,7 +17,8 @@
         android:id="@+id/tvComposeDoubleClickCheck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         android:text="Jetpack Compose 双击防抖"
         android:textAllCaps="false" />
 
@@ -24,21 +26,24 @@
         android:id="@+id/tvOptimizedThread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         android:text="线程整治" />
 
     <Button
         android:id="@+id/tvPrivacySentry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         android:text="隐私合规" />
 
     <Button
         android:id="@+id/tvLegalBitmap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         android:text="大图检测" />
 
 </LinearLayout>

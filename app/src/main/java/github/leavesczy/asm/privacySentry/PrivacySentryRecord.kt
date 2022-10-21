@@ -5,8 +5,7 @@ import org.apache.commons.io.FileUtils
 import java.io.File
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 object PrivacySentryRecord {
 

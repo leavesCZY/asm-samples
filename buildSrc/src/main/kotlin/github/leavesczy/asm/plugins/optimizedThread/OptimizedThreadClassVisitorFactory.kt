@@ -11,11 +11,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.Opcodes
-import org.objectweb.asm.tree.ClassNode
-import org.objectweb.asm.tree.LdcInsnNode
-import org.objectweb.asm.tree.MethodInsnNode
-import org.objectweb.asm.tree.MethodNode
-import org.objectweb.asm.tree.TypeInsnNode
+import org.objectweb.asm.tree.*
 
 /**
  * @Author: leavesCZY

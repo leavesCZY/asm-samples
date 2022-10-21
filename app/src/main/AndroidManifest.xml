@@ -13,7 +13,6 @@
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
             android:exported="true"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -26,35 +25,30 @@
             android:name=".doubleClick.view.ViewDoubleClickCheckActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
             android:exported="false"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".doubleClick.compose.ComposeDoubleClickCheckActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
             android:exported="false"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".optimizedThread.OptimizedThreadActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
             android:exported="false"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".privacySentry.PrivacySentryActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
             android:exported="false"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".legalBitmap.LegalBitmapActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
             android:exported="false"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
     </application>

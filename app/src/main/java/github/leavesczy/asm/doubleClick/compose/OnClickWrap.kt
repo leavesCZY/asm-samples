@@ -20,7 +20,7 @@ class OnClickWrap(private val onClick: (() -> Unit)) : Function0<Unit> {
 
     override fun invoke() {
         val currentTime = System.currentTimeMillis()
-        if (lastClickTime == 0L || currentTime - lastClickTime > MIN_DURATION) {
+        if (currentTime - lastClickTime > MIN_DURATION) {
             lastClickTime = currentTime
             onClick()
             log("onClick isEnabled : true")
@@ -30,7 +30,10 @@ class OnClickWrap(private val onClick: (() -> Unit)) : Function0<Unit> {
     }
 
     private fun log(log: String) {
-        Log.e("ViewDoubleClickCheck", log)
+        Log.e(
+            "OnClickWrap",
+            "${System.identityHashCode(this)} ${System.identityHashCode(onClick)} $log"
+        )
     }
 
 }
