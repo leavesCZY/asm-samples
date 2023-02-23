@@ -18,9 +18,6 @@ extensions.configure<github.leavesczy.asm.plugins.privacySentry.PrivacySentryGra
     methodName = "writeToFile"
 }
 
-val composeVersion = "1.3.0-rc01"
-val composeCompilerVersion = "1.3.2"
-
 android {
     namespace = "github.leavesczy.asm"
     compileSdk = 33
@@ -89,7 +86,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = composeCompilerVersion
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
     packagingOptions {
         resources {
@@ -100,17 +97,20 @@ android {
 
 dependencies {
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    implementation("androidx.appcompat:appcompat:1.6.0-rc01")
-    implementation("com.google.android.material:material:1.8.0-alpha01")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.8.0")
     implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper:3.0.9")
     implementation("commons-io:commons-io:2.6")
-    implementation("androidx.compose.ui:ui:${composeVersion}")
-    implementation("androidx.compose.ui:ui-tooling-preview:${composeVersion}")
-    debugImplementation("androidx.compose.ui:ui-tooling:${composeVersion}")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:${composeVersion}")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${composeVersion}")
-    implementation("androidx.activity:activity-compose:1.6.0")
-    implementation("androidx.compose.material3:material3:1.0.0-rc01")
+    val composeBom = platform("androidx.compose:compose-bom:2023.01.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.activity:activity-compose:1.6.1")
 }
