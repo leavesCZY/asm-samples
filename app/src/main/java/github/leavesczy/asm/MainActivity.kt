@@ -1,14 +1,15 @@
 package github.leavesczy.asm
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import github.leavesczy.asm.doubleClick.compose.ComposeDoubleClickCheckActivity
-import github.leavesczy.asm.doubleClick.view.ViewDoubleClickCheckActivity
-import github.leavesczy.asm.legalBitmap.LegalBitmapActivity
-import github.leavesczy.asm.optimizedThread.OptimizedThreadActivity
-import github.leavesczy.asm.privacySentry.PrivacySentryActivity
+import github.leavesczy.asm.bitmap.LegalBitmapActivity
+import github.leavesczy.asm.click.ComposeDoubleClickCheckActivity
+import github.leavesczy.asm.click.ViewDoubleClickCheckActivity
+import github.leavesczy.asm.privacy.privacy.PrivacySentryActivity
+import github.leavesczy.asm.thread.OptimizedThreadActivity
 
 /**
  * @Author: leavesCZY
@@ -21,21 +22,26 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        findViewById<TextView>(R.id.tvViewDoubleClickCheck).setOnClickListener {
-            startActivity(Intent(this, ViewDoubleClickCheckActivity::class.java))
+        findViewById<View>(R.id.btnViewDoubleClickCheck).setOnClickListener {
+            startActivity<ViewDoubleClickCheckActivity>()
         }
-        findViewById<TextView>(R.id.tvComposeDoubleClickCheck).setOnClickListener {
-            startActivity(Intent(this, ComposeDoubleClickCheckActivity::class.java))
+        findViewById<View>(R.id.btnComposeDoubleClickCheck).setOnClickListener {
+            startActivity<ComposeDoubleClickCheckActivity>()
         }
-        findViewById<TextView>(R.id.tvOptimizedThread).setOnClickListener {
-            startActivity(Intent(this, OptimizedThreadActivity::class.java))
+        findViewById<View>(R.id.btnOptimizedThread).setOnClickListener {
+            startActivity<OptimizedThreadActivity>()
         }
-        findViewById<TextView>(R.id.tvPrivacySentry).setOnClickListener {
-            startActivity(Intent(this, PrivacySentryActivity::class.java))
+        findViewById<View>(R.id.btnPrivacySentry).setOnClickListener {
+            startActivity<PrivacySentryActivity>()
         }
-        findViewById<TextView>(R.id.tvLegalBitmap).setOnClickListener {
-            startActivity(Intent(this, LegalBitmapActivity::class.java))
+        findViewById<View>(R.id.btnLegalBitmap).setOnClickListener {
+            startActivity<LegalBitmapActivity>()
         }
+    }
+
+    private inline fun <reified T : Activity> startActivity() {
+        val intent = Intent(this, T::class.java)
+        startActivity(intent)
     }
 
 }

@@ -21,36 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".doubleClick.view.ViewDoubleClickCheckActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".doubleClick.compose.ComposeDoubleClickCheckActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".optimizedThread.OptimizedThreadActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".privacySentry.PrivacySentryActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".legalBitmap.LegalBitmapActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

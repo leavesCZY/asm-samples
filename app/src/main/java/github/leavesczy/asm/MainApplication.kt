@@ -1,6 +1,7 @@
 package github.leavesczy.asm
 
 import android.app.Application
+import github.leavesczy.asm.privacy.privacy.ContextInject
 
 /**
  * @Author: leavesCZY
@@ -10,14 +11,9 @@ import android.app.Application
  */
 class MainApplication : Application() {
 
-    companion object {
-        lateinit var application: Application
-            private set
-    }
-
     override fun onCreate() {
         super.onCreate()
-        application = this
+        ContextInject.inject(context = this)
     }
 
 }

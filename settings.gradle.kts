@@ -7,6 +7,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -18,5 +19,9 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ASM_Transform"
+rootProject.name = "asm-samples"
 include(":app")
+include(":click")
+include(":bitmap")
+include(":privacy")
+include(":thread")

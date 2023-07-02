@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/tvViewDoubleClickCheck"
+        android:id="@+id/btnViewDoubleClickCheck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -14,7 +14,7 @@
         android:textAllCaps="false" />
 
     <Button
-        android:id="@+id/tvComposeDoubleClickCheck"
+        android:id="@+id/btnComposeDoubleClickCheck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -23,7 +23,7 @@
         android:textAllCaps="false" />
 
     <Button
-        android:id="@+id/tvOptimizedThread"
+        android:id="@+id/btnOptimizedThread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -31,7 +31,7 @@
         android:text="线程整治" />
 
     <Button
-        android:id="@+id/tvPrivacySentry"
+        android:id="@+id/btnPrivacySentry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -39,7 +39,7 @@
         android:text="隐私合规" />
 
     <Button
-        android:id="@+id/tvLegalBitmap"
+        android:id="@+id/btnLegalBitmap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
