@@ -1,11 +1,5 @@
-import github.leavesczy.asm.AsmPlugin
-
 subprojects {
     apply {
-        plugin<AsmPlugin>()
+        plugin<github.leavesczy.track.TrackPlugin>()
     }
-}
-
-tasks.register<Delete>("clean") {
-    delete(rootProject.buildDir)
 }

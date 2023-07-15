@@ -1,5 +1,5 @@
 android {
-    namespace = "github.leavesczy.asm.thread"
+    namespace = "github.leavesczy.track.thread"
 }
 
 dependencies {

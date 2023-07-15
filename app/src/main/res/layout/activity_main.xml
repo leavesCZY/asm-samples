@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btnViewDoubleClickCheck"
+        android:id="@+id/btnViewClick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="10dp"
         android:text="View 双击防抖"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        tools:ignore="HardcodedText" />
 
     <Button
-        android:id="@+id/btnComposeDoubleClickCheck"
+        android:id="@+id/btnComposeClick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="10dp"
         android:text="Jetpack Compose 双击防抖"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/btnOptimizedThread"
@@ -28,7 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="10dp"
-        android:text="线程整治" />
+        android:text="线程整治"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/btnPrivacySentry"
@@ -36,7 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="10dp"
-        android:text="隐私合规" />
+        android:text="隐私合规"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/btnLegalBitmap"
@@ -44,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="10dp"
-        android:text="大图检测" />
+        android:text="大图检测"
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>

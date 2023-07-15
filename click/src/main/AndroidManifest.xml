@@ -4,13 +4,13 @@
 
     <application>
         <activity
-            android:name=".ViewDoubleClickCheckActivity"
+            android:name=".ViewClickCheckActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".ComposeDoubleClickCheckActivity"
+            android:name=".ComposeClickCheckActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|uiMode"
             android:exported="false"
             android:screenOrientation="portrait"

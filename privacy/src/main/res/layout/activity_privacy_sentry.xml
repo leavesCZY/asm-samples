@@ -11,7 +11,17 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="Get Device ID"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btnGetAndroidId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Get Android ID"
+        android:textAllCaps="false"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/btnGetDeviceBrand"
@@ -19,23 +29,24 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="Get Device Brand"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        tools:ignore="HardcodedText" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="10dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="30dp">
 
         <TextView
             android:id="@+id/tvLog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
             android:gravity="center_horizontal"
-            android:lineSpacingMultiplier="1.1"
             android:textIsSelectable="true"
-            android:textSize="18sp"
+            android:textSize="16sp"
             tools:text="111111111111111" />
 
     </ScrollView>
