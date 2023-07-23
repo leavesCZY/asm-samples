@@ -2,12 +2,12 @@ android {
     namespace = "github.leavesczy.track"
 }
 
-apply {
-    plugin(github.leavesczy.track.plugins.click.view.ViewClickPlugin::class.java)
-    plugin(github.leavesczy.track.plugins.click.compose.ComposeClickPlugin::class.java)
-    plugin(github.leavesczy.track.plugins.bitmap.LegalBitmapPlugin::class.java)
-    plugin(github.leavesczy.track.plugins.privacy.PrivacySentryPlugin::class.java)
-    plugin(github.leavesczy.track.plugins.thread.OptimizedThreadPlugin::class.java)
+plugins {
+    id("github.leavesczy.track.click.view")
+    id("github.leavesczy.track.click.compose")
+    id("github.leavesczy.track.bitmap")
+    id("github.leavesczy.track.privacy")
+    id("github.leavesczy.track.thread")
 }
 
 extensions.configure<github.leavesczy.track.plugins.click.view.ViewClickPluginParameter> {
