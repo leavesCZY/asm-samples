@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 android {
-    namespace = "github.leavesczy.track.click"
+    namespace = "github.leavesczy.trace.click"
     kotlinOptions {
         freeCompilerArgs = listOf(
             "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
@@ -18,7 +18,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Dependencies.Compose.compilerVersion
+        kotlinCompilerExtensionVersion = Dependencies.Compose.compiler
     }
 }
 

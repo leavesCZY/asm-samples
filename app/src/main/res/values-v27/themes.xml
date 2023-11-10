@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Track" parent="Base.Theme.Track">
+    <style name="Theme.Trace" parent="Base.Theme.Trace">
         <item name="android:windowLightNavigationBar">true</item>
     </style>
 

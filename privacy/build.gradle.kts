@@ -1,5 +1,5 @@
 android {
-    namespace = "github.leavesczy.track.privacy"
+    namespace = "github.leavesczy.trace.privacy"
 }
 
 dependencies {

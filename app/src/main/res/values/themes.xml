@@ -1,13 +1,13 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Base.Theme.Track" parent="Theme.Material3.Light">
+    <style name="Base.Theme.Trace" parent="Theme.Material3.Light">
         <item name="colorPrimary">#0277BD</item>
         <item name="colorSurface">#0277BD</item>
         <item name="colorOnSurface">@android:color/white</item>
         <item name="android:navigationBarColor">@android:color/white</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
-    <style name="Theme.Track" parent="Base.Theme.Track" />
+    <style name="Theme.Trace" parent="Base.Theme.Trace" />
 
 </resources>

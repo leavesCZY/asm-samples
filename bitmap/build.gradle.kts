@@ -1,5 +1,5 @@
 android {
-    namespace = "github.leavesczy.track.bitmap"
+    namespace = "github.leavesczy.trace.bitmap"
 }
 
 dependencies {

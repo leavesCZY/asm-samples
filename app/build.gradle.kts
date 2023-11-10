@@ -1,40 +1,40 @@
 android {
-    namespace = "github.leavesczy.track"
+    namespace = "github.leavesczy.trace"
 }
 
 plugins {
-    id("github.leavesczy.track.click.view")
-    id("github.leavesczy.track.click.compose")
-    id("github.leavesczy.track.bitmap")
-    id("github.leavesczy.track.privacy")
-    id("github.leavesczy.track.thread")
+    id("github.leavesczy.trace.click.view")
+    id("github.leavesczy.trace.click.compose")
+    id("github.leavesczy.trace.bitmap")
+    id("github.leavesczy.trace.privacy")
+    id("github.leavesczy.trace.thread")
 }
 
-extensions.configure<github.leavesczy.track.plugins.click.view.ViewClickPluginParameter> {
-    clickCheckClass = "github.leavesczy.track.click.view.ViewClickMonitor"
+extensions.configure<github.leavesczy.trace.plugins.click.view.ViewClickPluginParameter> {
+    clickCheckClass = "github.leavesczy.trace.click.view.ViewClickMonitor"
     onClickMethodName = "onClick"
-    checkViewOnClickAnnotation = "github.leavesczy.track.click.view.CheckViewOnClick"
-    uncheckViewOnClickAnnotation = "github.leavesczy.track.click.view.UncheckViewOnClick"
-    include = listOf("github.leavesczy.track.click")
+    checkViewOnClickAnnotation = "github.leavesczy.trace.click.view.CheckViewOnClick"
+    uncheckViewOnClickAnnotation = "github.leavesczy.trace.click.view.UncheckViewOnClick"
+    include = listOf("github.leavesczy.trace.click")
 }
 
-extensions.configure<github.leavesczy.track.plugins.click.compose.ComposeClickPluginParameter> {
-    onClickClass = "github.leavesczy.track.click.compose.ComposeOnClick"
+extensions.configure<github.leavesczy.trace.plugins.click.compose.ComposeClickPluginParameter> {
+    onClickClass = "github.leavesczy.trace.click.compose.ComposeOnClick"
     whiteListTag = "noCheck"
 }
 
-extensions.configure<github.leavesczy.track.plugins.bitmap.LegalBitmapPluginParameter> {
-    imageViewClass = "github.leavesczy.track.bitmap.MonitorImageView"
+extensions.configure<github.leavesczy.trace.plugins.bitmap.LegalBitmapPluginParameter> {
+    imageViewClass = "github.leavesczy.trace.bitmap.MonitorImageView"
 }
 
-extensions.configure<github.leavesczy.track.plugins.privacy.PrivacySentryPluginParameter> {
-    methodOwner = "github.leavesczy.track.privacy.PrivacySentryRecord"
+extensions.configure<github.leavesczy.trace.plugins.privacy.PrivacySentryPluginParameter> {
+    methodOwner = "github.leavesczy.trace.privacy.PrivacySentryRecord"
     methodName = "writeToFile"
 }
 
-extensions.configure<github.leavesczy.track.plugins.thread.OptimizedThreadPluginParameter> {
-    optimizedThreadClass = "github.leavesczy.track.thread.OptimizedThread"
-    optimizedExecutorsClass = "github.leavesczy.track.thread.OptimizedExecutors"
+extensions.configure<github.leavesczy.trace.plugins.thread.OptimizedThreadPluginParameter> {
+    optimizedThreadClass = "github.leavesczy.trace.thread.OptimizedThread"
+    optimizedExecutorsClass = "github.leavesczy.trace.thread.OptimizedExecutors"
 }
 
 dependencies {

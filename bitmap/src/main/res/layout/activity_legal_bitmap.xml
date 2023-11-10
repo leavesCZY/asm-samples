@@ -15,7 +15,7 @@
         android:src="@drawable/legal_bitmap"
         tools:ignore="ContentDescription" />
 
-    <github.leavesczy.track.bitmap.CustomImageView
+    <github.leavesczy.trace.bitmap.CustomImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_margin="20dp"

@@ -1,5 +1,5 @@
 subprojects {
     apply {
-        plugin<github.leavesczy.track.TrackPlugin>()
+        plugin<github.leavesczy.trace.TracePlugin>()
     }
 }
